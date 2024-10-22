@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import {
+  emailState,
+  usernameState,
+} from '../../../shared/components/atoms/authState';
 
 interface SignUpPart1Props {
-  onNext: (email: string, username: string) => void;
+  onNext: () => void;
 }
 
 export function SignUpPart1({ onNext }: SignUpPart1Props) {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useRecoilState(emailState);
+  const [username, setUsername] = useRecoilState(usernameState);
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -18,7 +23,7 @@ export function SignUpPart1({ onNext }: SignUpPart1Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onNext(email, username);
+    onNext();
   };
 
   return (

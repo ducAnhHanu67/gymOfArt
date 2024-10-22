@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { passwordState } from '../../../shared/components/atoms/authState';
 
 interface SignUpPart2Props {
-  email: string;
-  username: string;
-  onSignUp: (password: string) => void;
+  onSignUp: () => void;
 }
 
-export function SignUpPart2({ email, username, onSignUp }: SignUpPart2Props) {
-  const [password, setPassword] = useState('');
+export function SignUpPart2({ onSignUp }: SignUpPart2Props) {
+  const [password, setPassword] = useRecoilState(passwordState);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -36,7 +36,7 @@ export function SignUpPart2({ email, username, onSignUp }: SignUpPart2Props) {
         password
       )
     ) {
-      onSignUp(password);
+      onSignUp();
     } else {
       toast.error('Password mismatch or invalid format.');
     }
