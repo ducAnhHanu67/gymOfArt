@@ -1,9 +1,16 @@
+import { useState } from 'react';
 import { Search, Coffee, ChevronDown, Bell, User, Menu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Header() {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
   return (
-    <header className="bg-primary text-white h-[80px]">
+    <header className="bg-primary text-white h-[80px] relative">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-6">
           <Link to="/">
@@ -38,9 +45,22 @@ export default function Header() {
           <button className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2">
             <Bell size={24} />
           </button>
-          <button className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2">
-            <User size={24} />
-          </button>
+          <div className="relative">
+            <button
+              onClick={toggleUserMenu}
+              className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2"
+            >
+              <User size={24} />
+            </button>
+            {isUserMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-[#2c2c3f] text-white rounded-lg shadow-lg py-2 z-50">
+                <Link to="/library" className="block px-4 py-2 hover:bg-[#3c3c4f]">My library</Link>
+                <Link to="/store" className="block px-4 py-2 hover:bg-[#3c3c4f]">My store</Link>
+                <Link to="/buy-coffee" className="block px-4 py-2 hover:bg-[#3c3c4f]">Buy GoA a coffee</Link>
+                <Link to="/logout" className="block px-4 py-2 hover:bg-[#3c3c4f]">Log Out</Link>
+              </div>
+            )}
+          </div>
           <button className="transition duration-300 ease-in-out hover:text-[#f5a97f]">
             <Menu size={24} />
           </button>

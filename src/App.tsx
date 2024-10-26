@@ -14,6 +14,7 @@ import Commissions from './features/commissions/Commissions';
 import Jobs from './features/jobs/Jobs';
 import Shop from './features/shop/Shop';
 import NotFound from './shared/components/pages/NotFound';
+import ProductDetail from './features/product/ProductDetail';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/commissions" element={<Commissions />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:productId" element={<ProductDetail />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
