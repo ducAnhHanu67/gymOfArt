@@ -9,12 +9,15 @@
     // Use 'define' semantics for class fields
     "useDefineForClassFields": true,
     // Specify the library files to be included in the compilation
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     // Set the module system for the program
     "module": "ESNext",
     // Skip type checking of declaration files
     "skipLibCheck": true,
-
     /* Bundler Mode */
     // Specify how modules get resolved
     "moduleResolution": "bundler",
@@ -30,7 +33,6 @@
     "noEmit": true,
     // Support JSX in .tsx files
     "jsx": "react-jsx",
-
     /* Code Checking */
     // Enable all strict type checking options
     "strict": true,
@@ -48,7 +50,13 @@
     "allowSyntheticDefaultImports": true,
   },
   // Specify the files to include in compilation
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*",
+    "src/redux/store.tsx"
+  ],
   // Specify the files to exclude from compilation
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
