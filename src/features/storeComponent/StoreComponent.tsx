@@ -5,19 +5,19 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store'; // Đảm bảo đường dẫn chính xác đến store.ts
 import { Product } from '../../redux/cartLibrarySlice'; // Import kiểu Product
 
-const Library: React.FC = () => {
+const StoreComponent: React.FC = () => {
     const navigate = useNavigate();
-    const libraryItems = useSelector((state: RootState) => state.cartLibrary.library); // Lấy library từ Redux store
+    const cartItem = useSelector((state: RootState) => state.cartLibrary.cart); // Lấy library từ Redux store
 
-    const handleSwitchToStore = () => {
-        navigate('/store');
+    const handleSwitchToLibrary = () => {
+        navigate('/library');
     };
 
     return (
         <div className="bg-[#1F1F30] text-white min-h-screen p-6">
             {/* Header */}
             <div className="mb-6">
-                <h1 className="text-2xl font-bold">MY LIBRARY</h1>
+                <h1 className="text-2xl font-bold">MY STORE</h1>
                 <p className="text-gray-400">Purchased Products</p>
             </div>
 
@@ -25,7 +25,7 @@ const Library: React.FC = () => {
                 {/* Sidebar */}
                 <div className="w-1/4 pr-6">
                     <ul className="space-y-4">
-                        <li className="bg-[#333348] p-3 rounded-md cursor-pointer">ALL ({libraryItems.length})</li>
+                        <li className="bg-[#333348] p-3 rounded-md cursor-pointer">ALL ({cartItem.length})</li>
                     </ul>
                     <button className="w-full bg-transparent border border-gray-600 text-white rounded-md p-3 mt-6">
                         Create a new folder
@@ -35,15 +35,15 @@ const Library: React.FC = () => {
                 {/* Main Content */}
                 <div className="w-3/4">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl">ALL ({libraryItems.length})</h2>
-                        <button onClick={handleSwitchToStore} className="bg-pink-600 px-4 py-2 rounded-md text-white">
-                            Switch to My Store
+                        <h2 className="text-xl">ALL ({cartItem.length})</h2>
+                        <button onClick={handleSwitchToLibrary} className="bg-pink-600 px-4 py-2 rounded-md text-white">
+                            Switch to My Purchase
                         </button>
                     </div>
 
                     {/* Product Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {libraryItems.map((product: Product) => (
+                        {cartItem.map((product: Product) => (
                             <div key={product.id} className="bg-[#333348] p-4 rounded-lg">
                                 <div className="h-40 bg-[#ff3366] flex items-center justify-center mb-4">
                                     <span className="text-white">Image</span>
@@ -63,4 +63,4 @@ const Library: React.FC = () => {
     );
 };
 
-export default Library;
+export default StoreComponent;

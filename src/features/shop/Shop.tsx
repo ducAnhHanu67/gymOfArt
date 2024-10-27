@@ -24,6 +24,7 @@ const featuredItems = [
 
 const shopItems = [
   {
+    id: '1',
     name: 'Christmas Tree 3D',
     price: 0.99,
     description: 'Asset for designer',
@@ -31,6 +32,7 @@ const shopItems = [
     image: '/placeholder.svg?height=200&width=200',
   },
   {
+    id: '2',
     name: 'Winter Wonderland',
     price: 1.99,
     description: 'Beautiful winter scene',
@@ -38,6 +40,7 @@ const shopItems = [
     image: '/placeholder.svg?height=200&width=200',
   },
   {
+    id: '3',
     name: 'Summer Breeze',
     price: 2.99,
     description: 'Relaxing summer landscape',
@@ -45,6 +48,7 @@ const shopItems = [
     image: '/placeholder.svg?height=200&width=200',
   },
   {
+    id: '4',
     name: 'Autumn Leaves',
     price: 1.49,
     description: 'Colorful autumn foliage',
@@ -52,6 +56,7 @@ const shopItems = [
     image: '/placeholder.svg?height=200&width=200',
   },
   {
+    id: '5',
     name: 'Spring Blossom',
     price: 2.49,
     description: 'Vibrant spring flowers',
@@ -60,6 +65,7 @@ const shopItems = [
   },
   // Add more shop items here
 ];
+
 
 const ShopPage: React.FC = () => {
   return (

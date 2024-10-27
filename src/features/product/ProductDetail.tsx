@@ -1,9 +1,10 @@
-// src/components/ProductDetail/ProductDetail.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Typography, Button, Paper, Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addToCart, addToLibrary } from '../../redux/cartLibrarySlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Product {
     id: string;
@@ -48,14 +49,19 @@ const ProductDetail: React.FC = () => {
 
     const handleAddToCart = () => {
         dispatch(addToCart(item));
+        toast.success("Added product to Store!", { autoClose: 1000 });
     };
 
     const handleAddToLibrary = () => {
         dispatch(addToLibrary(item));
+        toast.success("Added product to library!", { autoClose: 1000 });
     };
 
     return (
         <Box className="product-detail" sx={{ backgroundColor: '#1F1F30', color: 'white', p: 4 }}>
+            {/* Thêm ToastContainer để hiển thị thông báo */}
+            <ToastContainer />
+
             <Typography variant="h4" gutterBottom>{item.name}</Typography>
             <Box display="flex" alignItems="center" mt={1}>
                 <Typography variant="body2" color="white">By HenrySmith09</Typography>

@@ -1,13 +1,52 @@
-import { useState } from 'react';
-import { Search, Coffee, ChevronDown, Bell, User, Menu } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Search, Coffee, ChevronDown, Bell, User, Menu, ShoppingCart, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import { Product, removeFromCart } from '../../../redux/cartLibrarySlice';
 
 export default function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const cartRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Lấy danh sách sản phẩm trong giỏ hàng từ Redux store
+  const cartItems = useSelector((state: RootState) => state.cartLibrary.cart);
 
   const toggleUserMenu = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
   };
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
+  const handleRemoveFromCart = (id: string) => {
+    dispatch(removeFromCart(id));
+  };
+
+  // Đóng các toggle khi click bên ngoài
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        cartRef.current &&
+        !cartRef.current.contains(event.target as Node) &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsCartOpen(false);
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="bg-primary text-white h-[80px] relative">
@@ -45,7 +84,54 @@ export default function Header() {
           <button className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2">
             <Bell size={24} />
           </button>
-          <div className="relative">
+
+          {/* Nút Giỏ hàng */}
+          <div className="relative" ref={cartRef}>
+            <button
+              onClick={toggleCart}
+              className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2 relative"
+            >
+              <ShoppingCart size={24} />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
+            {isCartOpen && (
+              <div className="absolute right-0 mt-2 w-64 bg-[#2c2c3f] text-white rounded-lg shadow-lg py-2 z-50">
+                <h3 className="text-lg font-semibold px-4 py-2">Giỏ hàng của bạn</h3>
+                {cartItems.length === 0 ? (
+                  <p className="px-4 py-2">Giỏ hàng trống</p>
+                ) : (
+                  <ul>
+                    {cartItems.map((item: Product) => (
+                      <li key={item.id} className="flex items-center px-4 py-2 hover:bg-[#3c3c4f]">
+                        <img src={item.image} alt={item.name} className="w-12 h-12 rounded mr-3" />
+                        <div className="flex-1">
+                          <h4 className="font-medium">{item.name}</h4>
+                          <p className="text-sm text-gray-400">${item.price.toFixed(2)}</p>
+                        </div>
+                        <button
+                          onClick={() => handleRemoveFromCart(item.id)}
+                          className="text-red-500 hover:text-red-700 transition duration-300 ease-in-out"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="px-4 py-2">
+                  <Link to="/checkout" className="block text-center bg-[#f5a97f] text-primary px-4 py-2 rounded-full font-medium transition duration-300 ease-in-out hover:bg-[#f7c5a5]">
+                    Checkout
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative" ref={userMenuRef}>
             <button
               onClick={toggleUserMenu}
               className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2"

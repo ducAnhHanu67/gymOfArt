@@ -6,13 +6,20 @@ import Header from '../organisms/Header';
 export default function CommonLayout() {
   return (
     <div className="flex flex-col min-h-screen bg-primary text-white">
+      {/* Header */}
       <Header />
-      <div className="container mx-auto mt-10">
+
+      {/* Navbar */}
+      <div className="mt-10" style={{ width: '80%', margin: '0 auto' }}>
         <Navbar />
       </div>
-      <div className="container mx-auto min-h-[calc(100vh-200px)]">
+
+      {/* Main Content */}
+      <div className="min-h-[calc(100vh-200px)]" style={{ width: '80%', margin: '0 auto' }}>
         <Outlet />
       </div>
+
+      {/* Footer */}
       <Footer />
     </div>
   );

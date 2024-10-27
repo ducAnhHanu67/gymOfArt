@@ -1,36 +1,46 @@
-// cartLibrarySlice.ts
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+export interface Product {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+    date: string;
+    image?: string;
+    rating?: number;
+    reviews?: { user: string; comment: string; rating: number }[];
+    files?: number;
+    tags?: string[];
+    category?: string;
+    author?: string;
+}
 
 export interface CartLibraryState {
-    cart: any[]; // Replace 'any' with your actual product type
-    library: any[]; // Replace 'any' with your actual product type
+    cart: Product[];
+    library: Product[];
 }
 
 const initialState: CartLibraryState = {
     cart: [],
-    library: []
+    library: [],
 };
 
 const cartLibrarySlice = createSlice({
     name: 'cartLibrary',
     initialState,
     reducers: {
-        addToCart: (state, action) => {
-            const item = action.payload;
-            const existingItem = state.cart.find((product) => product.id === item.id);
-            if (!existingItem) {
-                state.cart.push(item);
-            }
+        addToCart: (state, action: PayloadAction<Product>) => {
+            state.cart.push(action.payload);
         },
-        addToLibrary: (state, action) => {
-            const item = action.payload;
-            const existingItem = state.library.find((product) => product.id === item.id);
-            if (!existingItem) {
-                state.library.push(item);
-            }
+        // Chỉ xóa sản phẩm có id trùng với id được truyền vào payload
+        removeFromCart: (state, action: PayloadAction<string>) => {
+            state.cart = state.cart.filter(item => item.id !== action.payload);
+        },
+        addToLibrary: (state, action: PayloadAction<Product>) => {
+            state.library.push(action.payload);
         },
     },
 });
 
-export const { addToCart, addToLibrary } = cartLibrarySlice.actions;
+export const { addToCart, removeFromCart, addToLibrary } = cartLibrarySlice.actions;
 export default cartLibrarySlice.reducer;

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 interface ShopItemProps {
   item: {
-    id: number;
+    id: string;
     name: string;
     price: number;
     description: string;

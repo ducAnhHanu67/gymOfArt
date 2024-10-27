@@ -16,6 +16,8 @@ import Shop from './features/shop/Shop';
 import NotFound from './shared/components/pages/NotFound';
 import ProductDetail from './features/product/ProductDetail';
 import Library from './features/library/Library';
+import StoreComponent from './features/storeComponent/StoreComponent';
+import Payment from './features/shop/checkout/Payment';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/library" element={<Library />} />
+            <Route path="/store" element={<StoreComponent />} />
+            <Route path="/checkout" element={<Payment />} />
             <Route path="/Product/:productId" element={<ProductDetail />} />
           </Route>
           <Route path="*" element={<NotFound />} />

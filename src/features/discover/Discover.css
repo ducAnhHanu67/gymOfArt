@@ -1,0 +1,19 @@
+/* Discover.css */
+
+/* Tùy chỉnh thanh cuộn trong phần Post */
+.post-section::-webkit-scrollbar {
+  width: 8px; /* Chiều rộng thanh cuộn */
+}
+
+.post-section::-webkit-scrollbar-track {
+  background: #1f1f30; /* Màu nền của track thanh cuộn */
+}
+
+.post-section::-webkit-scrollbar-thumb {
+  background-color: #ff3366; /* Màu của thanh cuộn */
+  border-radius: 10px; /* Làm tròn thanh cuộn */
+}
+
+.post-section::-webkit-scrollbar-thumb:hover {
+  background-color: #ff0050; /* Màu của thanh cuộn khi hover */
+}
