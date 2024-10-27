@@ -100,9 +100,9 @@ export default function Header() {
             </button>
             {isCartOpen && (
               <div className="absolute right-0 mt-2 w-64 bg-[#2c2c3f] text-white rounded-lg shadow-lg py-2 z-50">
-                <h3 className="text-lg font-semibold px-4 py-2">Giỏ hàng của bạn</h3>
+                <h3 className="text-lg font-semibold px-4 py-2">Your Cart</h3>
                 {cartItems.length === 0 ? (
-                  <p className="px-4 py-2">Giỏ hàng trống</p>
+                  <p className="px-4 py-2">Empty cart.</p>
                 ) : (
                   <ul>
                     {cartItems.map((item: Product) => (

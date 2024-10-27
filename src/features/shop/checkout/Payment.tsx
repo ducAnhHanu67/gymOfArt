@@ -1,11 +1,53 @@
 import { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 const Payment: React.FC = () => {
+    const [email, setEmail] = useState<string>(''); // Người dùng nhập email người nhận
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [address, setAddress] = useState<string>('');
+    const [country, setCountry] = useState<string>('');
+    const [postalCode, setPostalCode] = useState<string>('');
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [discountCode, setDiscountCode] = useState<string>('');
 
-    const handleApplyDiscount = (): void => {
-        // Xử lý mã giảm giá
-        alert(`Mã giảm giá đã được áp dụng: ${discountCode}`);
+    const totalAmount = 10000; // Tổng số tiền
+
+    const handleOrder = async () => {
+        const fullName = `${firstName} ${lastName}`;
+
+        // Tạo URL VietQR
+        const vietQRUrl = `https://img.vietqr.io/image/970436-${phoneNumber}-default.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
+            `Thanh toán đơn hàng của ${fullName}`
+        )}`;
+
+        // Cấu hình dữ liệu gửi email, bao gồm `to_email`
+        const orderData = {
+            to_email: email, // Đây là email người nhận
+            email,
+            fullName,
+            address,
+            country,
+            postalCode,
+            phoneNumber,
+            totalAmount,
+            vietQRUrl,
+            discountCode,
+        };
+
+        try {
+            // Gửi email với emailjs
+            await emailjs.send(
+                'service_n2aow8a',       // Thay bằng Service ID của bạn
+                'template_xfl5odt',      // Thay bằng Template ID của bạn
+                orderData,
+                'd_5IRrd1Kz66u6b2U'      // Thay bằng Public Key của bạn
+            );
+            alert('Đơn hàng của bạn đã được gửi thành công!');
+        } catch (error) {
+            console.error('Lỗi khi gửi email:', error);
+            alert('Gửi email thất bại. Vui lòng thử lại sau.');
+        }
     };
 
     return (
@@ -19,70 +61,60 @@ const Payment: React.FC = () => {
                             type="email"
                             placeholder="Your email"
                             className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <div className="flex gap-4">
                             <input
                                 type="text"
                                 placeholder="First name"
                                 className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
                             />
                             <input
                                 type="text"
                                 placeholder="Last name"
                                 className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
                             />
                         </div>
                         <input
                             type="text"
                             placeholder="Address"
                             className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
                         />
                         <input
                             type="text"
                             placeholder="Country"
                             className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
                         />
                         <div className="flex gap-4">
                             <input
                                 type="text"
                                 placeholder="Postal code"
                                 className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                                value={postalCode}
+                                onChange={(e) => setPostalCode(e.target.value)}
                             />
                             <input
                                 type="text"
                                 placeholder="Phone number"
                                 className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
                             />
                         </div>
-                        <p className="text-sm text-gray-400">
-                            Bạn có thể thanh toán bằng cách CHUYỂN KHOẢN qua ngân hàng hoặc thông qua MOMO.
-                        </p>
-                        <p className="text-sm text-gray-400">
-                            Chúng tôi sẽ không thể hoàn tiền cho bạn nếu sự cố không xuất phát từ GYM OF ART.
-                        </p>
                     </div>
 
                     {/* Thông tin sản phẩm */}
                     <div>
-                        <h1 className="text-2xl font-semibold mb-6">Asset Info</h1>
-                        <div className="bg-[#3c3c4f] p-4 rounded-lg flex items-center gap-4">
-                            <div className="w-20 h-20 bg-red-500 rounded-md"></div>
-                            <div>
-                                <h2 className="text-lg font-semibold">Asset's name</h2>
-                                <p className="text-sm text-gray-400">Asset for designer</p>
-                                <p className="text-sm text-gray-400">18th October, 2023</p>
-                            </div>
-                        </div>
-                        <div className="mt-4 bg-[#3c3c4f] p-4 rounded-lg">
-                            <h2 className="text-lg font-semibold mb-2">Files (5)</h2>
-                            <ul className="space-y-2 text-sm">
-                                <li>ABC.psd</li>
-                                <li>ABC.obj</li>
-                                <li>ABC.jpeg</li>
-                                <li>tutorial.mp4</li>
-                                <li>license.txt</li>
-                            </ul>
-                        </div>
+                        {/* Discount Code */}
                         <div className="flex items-center mt-4 gap-2">
                             <input
                                 type="text"
@@ -91,23 +123,20 @@ const Payment: React.FC = () => {
                                 onChange={(e) => setDiscountCode(e.target.value)}
                                 className="w-full p-3 rounded bg-[#3c3c4f] border border-[#f97066]"
                             />
-                            <button
-                                onClick={handleApplyDiscount}
-                                className="bg-[#f97066] text-white px-4 py-3 rounded font-semibold hover:bg-[#f7c5a5] transition"
-                            >
-                                Apply
-                            </button>
                         </div>
                         <div className="flex justify-between items-center mt-6 text-lg font-semibold">
                             <span>Total</span>
-                            <span>0.99$</span>
+                            <span>{totalAmount}</span>
                         </div>
                     </div>
                 </div>
 
-                {/* Nút Tiếp Tục */}
+                {/* Nút Order */}
                 <div className="mt-6">
-                    <button className="w-full bg-blue-500 text-white p-4 rounded-lg font-semibold hover:bg-blue-600 transition">
+                    <button
+                        onClick={handleOrder}
+                        className="w-full bg-blue-500 text-white p-4 rounded-lg font-semibold hover:bg-blue-600 transition"
+                    >
                         Order
                     </button>
                 </div>

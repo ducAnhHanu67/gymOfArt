@@ -103,8 +103,8 @@ const ProductDetail: React.FC = () => {
                 <Grid item xs={4}>
                     <Paper sx={{ backgroundColor: '#2A2A3C', p: 2, mb: 3 }}>
                         <Typography variant="h6" color='white' gutterBottom>{item.name}</Typography>
-                        <Typography>File: ({item.files})</Typography>
-                        <Typography>Quantity: 1</Typography>
+                        <Typography color='#5a70a2'>File: ({item.files})</Typography>
+                        <Typography color='#5a70a2'>Quantity: 1</Typography>
                         <Button variant="contained" fullWidth sx={{ backgroundColor: '#ff3366', mt: 2, mb: 1 }} onClick={handleAddToCart}>
                             Add to cart
                         </Button>
@@ -113,18 +113,18 @@ const ProductDetail: React.FC = () => {
                         </Button>
                     </Paper>
 
-                    <Paper sx={{ backgroundColor: '#2A2A3C', p: 2 }}>
+                    <Paper sx={{ backgroundColor: '#1f1f30', p: 2 }}>
                         <Typography variant="h6" color='white' gutterBottom>Rating & Reviews</Typography>
                         {item.reviews?.map((review, index) => (
                             <Paper key={index} sx={{ backgroundColor: '#333348', p: 2, mb: 2 }}>
                                 <Box display="flex" justifyContent="space-between">
-                                    <Typography variant="body1" fontWeight="bold">{review.user}</Typography>
+                                    <Typography color='#5a70a2' variant="body1" fontWeight="bold">{review.user}</Typography>
                                     <Box display="flex" alignItems="center">
-                                        <Typography variant="body2">{review.rating}</Typography>
+                                        <Typography color='#5a70a2' variant="body2">{review.rating}</Typography>
                                         <Typography color="warning.main" ml={0.5}>★</Typography>
                                     </Box>
                                 </Box>
-                                <Typography variant="body2" color="textSecondary" mt={1}>{review.comment}</Typography>
+                                <Typography variant="body2" color='#5a70a2' mt={1}>{review.comment}</Typography>
                                 <Box display="flex" gap={2} color="gray" mt={1}>
                                     <Typography variant="caption">👍 0</Typography>
                                     <Typography variant="caption">👎 0</Typography>
