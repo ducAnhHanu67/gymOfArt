@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FeaturedItems from './components/FeaturedItems';
 import ShopItemsGrid from './components/ShopItemsGrid';
 
+interface ProductData {
+  product: {
+    productId: string;
+    productName: string;
+    productType: string;
+    referenceId: string;
+    price: number;
+    createdAt: string;
+    updatedAt: string | null;
+  };
+  imageUrl: string;
+}
 const featuredItems = [
   {
     title:
@@ -22,60 +34,45 @@ const featuredItems = [
   // Add more featured items here
 ];
 
-const shopItems = [
-  {
-    id: '1',
-    name: 'Christmas Tree 3D',
-    price: 0.99,
-    description: 'Asset for designer',
-    date: '18th October, 2023',
-    image: '/placeholder.svg?height=200&width=200',
-  },
-  {
-    id: '2',
-    name: 'Winter Wonderland',
-    price: 1.99,
-    description: 'Beautiful winter scene',
-    date: '19th October, 2023',
-    image: '/placeholder.svg?height=200&width=200',
-  },
-  {
-    id: '3',
-    name: 'Summer Breeze',
-    price: 2.99,
-    description: 'Relaxing summer landscape',
-    date: '20th October, 2023',
-    image: '/placeholder.svg?height=200&width=200',
-  },
-  {
-    id: '4',
-    name: 'Autumn Leaves',
-    price: 1.49,
-    description: 'Colorful autumn foliage',
-    date: '21st October, 2023',
-    image: '/placeholder.svg?height=200&width=200',
-  },
-  {
-    id: '5',
-    name: 'Spring Blossom',
-    price: 2.49,
-    description: 'Vibrant spring flowers',
-    date: '22nd October, 2023',
-    image: '/placeholder.svg?height=200&width=200',
-  },
-  // Add more shop items here
-];
-
-
 const ShopPage: React.FC = () => {
+  const [shopItems, setShopItems] = useState<ProductData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://gym-of-art.azurewebsites.net/api/Product/admin-role', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data: ProductData[] = await response.json();
+        setShopItems(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#1a1b26] text-white p-8">
       <h1 className="text-3xl font-bold mb-6 text-center">
         FEATURED & RECOMMENDED
       </h1>
 
-      <FeaturedItems items={featuredItems} />
-      <ShopItemsGrid items={shopItems} />
+      <FeaturedItems items={featuredItems} />/ {/* Bạn có thể cập nhật dữ liệu FeaturedItems nếu cần */}
+      <ShopItemsGrid items={shopItems.map(item => ({
+        id: item.product.productId,
+        name: item.product.productName,
+        price: item.product.price / 1000, // Hiển thị giá với đơn vị nghìn
+        description: item.product.productType,
+        date: new Date(item.product.createdAt).toLocaleDateString(),
+        image: item.imageUrl,
+      }))} />
     </div>
   );
 };

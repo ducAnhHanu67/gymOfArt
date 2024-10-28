@@ -19,30 +19,48 @@ interface Product {
     tags?: string[];
 }
 
-const dummyData: Product = {
-    id: "1",
-    name: "Christmas Tree 3D",
-    price: 20,
-    description: "The 3D Christmas tree is a meticulously crafted digital product that brings the festive spirit to life in a virtual space. Fully modeled using 3D software, this tree features realistic details, making it the perfect choice for creative projects, animations, or virtual environments during the holiday season.",
-    date: "2023-10-26",
-    image: "/path/to/image.png",
-    rating: 4.6,
-    reviews: [
-        { user: "RyoNguyen", comment: "Amazing assets!!! Just want to say the creator is awesome to build this tree.", rating: 5 },
-        { user: "Minh Thach", comment: "Good quality, but could use more variations.", rating: 4 },
-    ],
-    files: 5,
-    tags: ["3D assets", "Maya", "Blender"]
-};
-
 const ProductDetail: React.FC = () => {
     const { productId } = useParams<{ productId: string }>();
     const [item, setItem] = useState<Product | null>(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Sử dụng dummy data cho đến khi API hoạt động
-        setItem(dummyData);
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`https://gym-of-art.azurewebsites.net/api/Product/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch product data');
+                }
+                const data = await response.json();
+
+                // Chuyển đổi dữ liệu API thành định dạng cần thiết cho component
+                const productData: Product = {
+                    id: data.product.productId,
+                    name: data.product.productName,
+                    price: data.product.price / 1000, // Chuyển giá sang đơn vị nghìn
+                    description: data.product.productType,
+                    date: new Date(data.product.createdAt).toLocaleDateString(),
+                    image: data.imageUrl,
+                    rating: 4.6, // Thêm rating tạm thời (giá trị giả định nếu không có)
+                    reviews: [
+                        { user: "RyoNguyen", comment: "Amazing assets!!! Just want to say the creator is awesome to build this tree.", rating: 5 },
+                        { user: "Minh Thach", comment: "Good quality, but could use more variations.", rating: 4 },
+                    ], // Thêm reviews tạm thời (nếu API chưa cung cấp)
+                    files: 5,
+                    tags: ["3D assets", "Maya", "Blender"]
+                };
+                setItem(productData);
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        };
+
+        fetchProduct();
     }, [productId]);
 
     if (!item) return <div>Loading...</div>;
@@ -59,7 +77,6 @@ const ProductDetail: React.FC = () => {
 
     return (
         <Box className="product-detail" sx={{ backgroundColor: '#1F1F30', color: 'white', p: 4 }}>
-            {/* Thêm ToastContainer để hiển thị thông báo */}
             <ToastContainer />
 
             <Typography variant="h4" gutterBottom>{item.name}</Typography>
@@ -84,7 +101,7 @@ const ProductDetail: React.FC = () => {
                 <Grid item xs={8}>
                     <Paper sx={{ backgroundColor: '#333348', p: 2 }}>
                         <Box sx={{ height: 300, backgroundColor: '#ff3366', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Typography color="white">Image Placeholder</Typography>
+                            <img src={item.image} alt={item.name} style={{ maxWidth: '100%', maxHeight: '100%' }} />
                         </Box>
                         <Box display="flex" gap={1} mt={2}>
                             <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} />

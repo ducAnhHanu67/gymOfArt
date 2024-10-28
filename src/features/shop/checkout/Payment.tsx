@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import emailjs from 'emailjs-com';
+import { RootState } from '../../../redux/store'; // Import RootState để lấy dữ liệu từ store
 
 const Payment: React.FC = () => {
     const [email, setEmail] = useState<string>(''); // Người dùng nhập email người nhận
@@ -11,7 +13,11 @@ const Payment: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [discountCode, setDiscountCode] = useState<string>('');
 
-    const totalAmount = 10000; // Tổng số tiền
+    // Lấy danh sách sản phẩm trong giỏ hàng từ Redux store
+    const cart = useSelector((state: RootState) => state.cartLibrary.cart);
+
+    // Tính tổng tiền từ giỏ hàng
+    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
 
     const handleOrder = async () => {
         const fullName = `${firstName} ${lastName}`;
@@ -112,8 +118,18 @@ const Payment: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Thông tin sản phẩm */}
+                    {/* Thông tin sản phẩm trong giỏ hàng */}
                     <div>
+                        <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
+                        <div className="space-y-4">
+                            {cart.map((item) => (
+                                <div key={item.id} className="flex justify-between items-center p-3 rounded bg-[#3c3c4f]">
+                                    <span>{item.name}</span>
+                                    <span>{item.price} VND</span>
+                                </div>
+                            ))}
+                        </div>
+
                         {/* Discount Code */}
                         <div className="flex items-center mt-4 gap-2">
                             <input
@@ -126,7 +142,7 @@ const Payment: React.FC = () => {
                         </div>
                         <div className="flex justify-between items-center mt-6 text-lg font-semibold">
                             <span>Total</span>
-                            <span>{totalAmount}</span>
+                            <span>{totalAmount} VND</span>
                         </div>
                     </div>
                 </div>
