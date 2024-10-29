@@ -234,60 +234,6 @@ const Discover: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Post Dialog */}
-      {/* <Dialog open={openPostDialog} onClose={handleClosePostDialog} maxWidth="md" fullWidth >
-        <DialogTitle>{selectedPost?.username}'s Post</DialogTitle>
-        <DialogContent>
-          <Box display="flex" alignItems="center" mb={2}>
-            <Avatar src={selectedPost?.userImage} />
-            <Box ml={2}>
-              <Typography variant="body1" fontWeight="bold">
-                {selectedPost?.username}
-              </Typography>
-              <Typography variant="body2" color="gray">
-                {selectedPost?.description}
-              </Typography>
-            </Box>
-          </Box>
-          <Box
-            component="img"
-            src={selectedPost?.image}
-            alt="post"
-            sx={{ width: '100%', borderRadius: 2, marginBottom: 2 }}
-          />
-          <Typography variant="h6">Comments</Typography>
-          {discussions.map((discussion, index) => (
-            <Box key={index} display="flex" alignItems="center" mb={1}>
-              <Avatar src={discussion.userImage} />
-              <Box ml={2}>
-                <Typography variant="body2" fontWeight="bold">
-                  {discussion.username}
-                </Typography>
-                <Typography variant="body2" color="gray">
-                  {discussion.text}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
-          <Box display="flex" alignItems="center" mt={2}>
-            <TextField
-              variant="outlined"
-              placeholder="Add a comment..."
-              fullWidth
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              sx={{
-                backgroundColor: '#1f1f30',
-                borderRadius: 2,
-                input: { color: 'white' },
-              }}
-            />
-            <Button onClick={handleAddComment} variant="contained" sx={{ marginLeft: 1, backgroundColor: '#3b5998' }}>
-              Comment
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog> */}
       <Dialog open={openPostDialog} onClose={handleClosePostDialog} maxWidth="md" fullWidth >
         <DialogTitle>{selectedPost?.username}'s Post</DialogTitle>
         <DialogContent>
@@ -296,8 +242,46 @@ const Discover: React.FC = () => {
             <Box component="img" src={selectedPost?.image} alt="post" sx={{ width: '50%', borderRadius: 2 }} />
 
             {/* Phần comment */}
-            <Box ml={2} width="50%" sx={{ backgroundColor: '#28283b' }}>
-              <Box display="flex" alignItems="center" mt={2}>
+            <Box ml={2} width="50%" sx={{ backgroundColor: '#28283b', padding: 2, borderRadius: 2 }}>
+              {/* Thumbnail, Button Follow, and Description */}
+              <Box display="flex" alignItems="center" mb={2}>
+                <Avatar src={selectedPost?.userImage} sx={{ width: 50, height: 50 }} />
+                <Box ml={2} flex={1}>
+                  <Typography variant="body1" fontWeight="bold" color="white">
+                    {selectedPost?.username}
+                  </Typography>
+                  <Typography variant="body2" color="gray">
+                    @{selectedPost?.username}23
+                  </Typography>
+                </Box>
+                <Button variant="contained" sx={{ backgroundColor: '#3b5998', color: 'white' }}>
+                  Follow
+                </Button>
+              </Box>
+
+              {/* Description */}
+              <Typography variant="body2" color="white" mb={2}>
+                {selectedPost?.description}
+              </Typography>
+
+              {/* Icon Section */}
+              <Box display="flex" justifyContent="space-around" color="gray" mb={2}>
+                <Box display="flex" alignItems="center">
+                  <Favorite fontSize="small" />
+                  <Typography ml={0.5}>{selectedPost?.likes}</Typography>
+                </Box>
+                <Box display="flex" alignItems="center">
+                  <ChatBubbleOutline fontSize="small" />
+                  <Typography ml={0.5}>{selectedPost?.comments}</Typography>
+                </Box>
+                <Box display="flex" alignItems="center">
+                  <Share fontSize="small" />
+                  <Typography ml={0.5}>{selectedPost?.shares}</Typography>
+                </Box>
+              </Box>
+
+              {/* Comment Input */}
+              <Box display="flex" alignItems="center" mb={2}>
                 <TextField
                   variant="outlined"
                   placeholder="Add a comment..."
@@ -326,6 +310,7 @@ const Discover: React.FC = () => {
                 </Button>
               </Box>
 
+              {/* Display Comments */}
               {discussions.map((discussion, index) => (
                 <Box key={index} display="flex" alignItems="center" mb={1}>
                   <Avatar src={discussion.userImage} />
@@ -339,8 +324,8 @@ const Discover: React.FC = () => {
                   </Box>
                 </Box>
               ))}
-
             </Box>
+
           </Box>
         </DialogContent>
       </Dialog>
