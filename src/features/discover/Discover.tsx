@@ -234,15 +234,49 @@ const Discover: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={openPostDialog} onClose={handleClosePostDialog} maxWidth="md" fullWidth >
-        <DialogTitle>{selectedPost?.username}'s Post</DialogTitle>
-        <DialogContent>
-          <Box display="flex" flexDirection="row" alignItems="flex-start" mb={2}>
+      <Dialog
+        open={openPostDialog}
+        onClose={handleClosePostDialog}
+        maxWidth="xl"
+        fullWidth={false}
+        sx={{
+          '& .MuiDialog-paper': {
+            width: 1200, // Chiều rộng 1200
+            height: 900, // Chiều cao 900
+            maxWidth: 'none',
+          },
+        }}
+      >
+
+        <DialogContent sx={{ height: '100%', padding: 0 }}> {/* Trừ chiều cao của DialogTitle */}
+          <Box display="flex" flexDirection="row" alignItems="stretch" height="100%">
             {/* Phần ảnh */}
-            <Box component="img" src={selectedPost?.image} alt="post" sx={{ width: '50%', borderRadius: 2 }} />
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                width: '70%',  // Đặt phần chứa ảnh chiếm 70% chiều rộng
+                height: '100%', // Chiều cao chiếm toàn bộ
+                borderRadius: 2,
+                background: '#494949'
+              }}
+            >
+              <Box
+                component="img"
+                src={selectedPost?.image}
+                alt="post"
+                sx={{
+                  width: '100%',         // Đặt chiều rộng ảnh là 70% của phần chứa ảnh
+                  height: '60%',        // Đặt chiều cao ảnh là 60% của phần chứa ảnh
+                  borderRadius: 2,
+                  objectFit: 'contain', // Đảm bảo ảnh giữ nguyên tỉ lệ trong giới hạn
+                }}
+              />
+            </Box>
 
             {/* Phần comment */}
-            <Box ml={2} width="50%" sx={{ backgroundColor: '#28283b', padding: 2, borderRadius: 2 }}>
+            <Box width="30%" sx={{ backgroundColor: '#28283b', padding: 2, borderRadius: 2, height: '100%', overflowY: 'auto' }}>
               {/* Thumbnail, Button Follow, and Description */}
               <Box display="flex" alignItems="center" mb={2}>
                 <Avatar src={selectedPost?.userImage} sx={{ width: 50, height: 50 }} />
@@ -302,11 +336,11 @@ const Discover: React.FC = () => {
                     backgroundColor: '#e74863',
                     color: 'white',
                     '&:hover': {
-                      backgroundColor: '#d3cbc6' // Màu nền khi hover nếu bạn muốn thay đổi
+                      backgroundColor: '#d3cbc6'
                     }
                   }}
                 >
-                  <SendIcon sx={{ color: 'white' }} /> {/* Icon màu trắng */}
+                  <SendIcon sx={{ color: 'white' }} />
                 </Button>
               </Box>
 
@@ -325,10 +359,11 @@ const Discover: React.FC = () => {
                 </Box>
               ))}
             </Box>
-
           </Box>
         </DialogContent>
       </Dialog>
+
+
 
     </Box>
   );
