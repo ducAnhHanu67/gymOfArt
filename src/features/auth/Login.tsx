@@ -11,18 +11,20 @@ export default function LoginForm() {
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1);
 
+  console.log("API URL:", import.meta.env.VITE_API_URL);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/Auth/login`,
         {
-          Email: email,
-          Password: password,
+          email: email,
+          password: password,
         },
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json', // Chuyển sang kiểu JSON
           },
         }
       );

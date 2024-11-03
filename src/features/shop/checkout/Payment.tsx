@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import emailjs from 'emailjs-com';
 import { RootState } from '../../../redux/store'; // Import RootState để lấy dữ liệu từ store
 
 const Payment: React.FC = () => {
@@ -17,19 +16,14 @@ const Payment: React.FC = () => {
     const cart = useSelector((state: RootState) => state.cartLibrary.cart);
 
     // Tính tổng tiền từ giỏ hàng
-    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    // const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    const totalAmount = 3000;
 
     const handleOrder = async () => {
         const fullName = `${firstName} ${lastName}`;
 
-        // Tạo URL VietQR
-        const vietQRUrl = `https://img.vietqr.io/image/970436-${phoneNumber}-default.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
-            `Thanh toán đơn hàng của ${fullName}`
-        )}`;
-
-        // Cấu hình dữ liệu gửi email, bao gồm `to_email`
+        // Cấu hình dữ liệu cho yêu cầu gửi đến server
         const orderData = {
-            to_email: email, // Đây là email người nhận
             email,
             fullName,
             address,
@@ -37,22 +31,39 @@ const Payment: React.FC = () => {
             postalCode,
             phoneNumber,
             totalAmount,
-            vietQRUrl,
             discountCode,
+            items: cart.map(item => ({
+                name: item.name,
+                quantity: 1, // Giả định số lượng là 1 (có thể thay đổi nếu cần)
+                price: item.price,
+            })),
         };
 
         try {
-            // Gửi email với emailjs
-            await emailjs.send(
-                'service_n2aow8a',       // Thay bằng Service ID của bạn
-                'template_xfl5odt',      // Thay bằng Template ID của bạn
-                orderData,
-                'd_5IRrd1Kz66u6b2U'      // Thay bằng Public Key của bạn
-            );
-            alert('Đơn hàng của bạn đã được gửi thành công!');
+            // Gửi yêu cầu đến server Express
+            const response = await fetch("http://localhost:3030/create-embedded-payment-link", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            });
+
+            // Kiểm tra phản hồi từ server
+            const result = await response.json();
+            if (response.ok) {
+                // Nếu thành công, chuyển hướng người dùng đến liên kết thanh toán
+                window.location.href = result.checkoutUrl;
+                console.log('okeke', result);
+
+
+            } else {
+                console.error("Failed to create payment link:", result.message);
+                alert("Gửi yêu cầu thanh toán thất bại. Vui lòng thử lại.");
+            }
         } catch (error) {
-            console.error('Lỗi khi gửi email:', error);
-            alert('Gửi email thất bại. Vui lòng thử lại sau.');
+            console.error("Lỗi khi gửi yêu cầu đến server:", error);
+            alert("Gửi yêu cầu thất bại. Vui lòng thử lại sau.");
         }
     };
 

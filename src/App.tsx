@@ -20,6 +20,7 @@ import StoreComponent from './features/storeComponent/StoreComponent';
 import Payment from './features/shop/checkout/Payment';
 import AdminRoute from './features/Dashboard/AdminRoute';
 import AdminDashboard from './features/Dashboard/AdminDashboard';
+import PaymentStatus from './features/shop/checkout/PaymentStatus';
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
             <Route path="/library" element={<Library />} />
             <Route path="/store" element={<StoreComponent />} />
             <Route path="/checkout" element={<Payment />} />
+            <Route path="/payment-success" element={<PaymentStatus />} />
+            <Route path="/payment-cancel" element={<PaymentStatus />} />
             <Route path="/Product/:productId" element={<ProductDetail />} />
           </Route>
 

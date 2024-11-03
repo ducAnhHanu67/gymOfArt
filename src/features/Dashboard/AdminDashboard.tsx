@@ -1,12 +1,40 @@
 // AdminDashboard.tsx
-import React from 'react';
-import { Box, Grid, Typography, Container } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Grid, Typography, Container, List, ListItem, ListItemText, Divider } from '@mui/material';
 import Sidebar from '../Dashboard/components/Sidebar';
 import Header from '../Dashboard/components/Header';
 import StatCard from '../Dashboard/components/StatCard';
 import EventList from '../Dashboard/components/EventList';
 
+interface Order {
+    id: number;
+    orderCode: string;
+    email: string;
+    fullName: string;
+    address: string;
+    amount: number;
+    status: string;
+    createdAt: string;
+}
+
 const AdminDashboard: React.FC = () => {
+    const [orders, setOrders] = useState<Order[]>([]);
+
+    useEffect(() => {
+        // Gọi API để lấy danh sách đơn hàng
+        const fetchOrders = async () => {
+            try {
+                const response = await fetch("http://localhost:3030/orders");
+                const data = await response.json();
+                setOrders(data);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
     return (
         <Box sx={{ display: 'flex', bgcolor: '#1f1f2d', minHeight: '100vh', color: '#fff' }}>
             <Sidebar />
@@ -31,6 +59,41 @@ const AdminDashboard: React.FC = () => {
                     </Grid>
 
                     <EventList />
+
+                    {/* Danh sách đơn hàng */}
+                    <Box sx={{ mt: 5 }}>
+                        <Typography variant="h6" sx={{ mb: 2 }}>Danh sách đơn hàng</Typography>
+                        <List sx={{ bgcolor: '#2a2a3b', borderRadius: 2 }}>
+                            {orders.map((order) => (
+                                <React.Fragment key={order.id}>
+                                    <ListItem>
+                                        <ListItemText
+                                            primary={`Order Code: ${order.orderCode}`}
+                                            secondary={
+                                                <>
+                                                    <Typography component="span" variant="body2" color="white">
+                                                        {order.fullName} - {order.email}
+                                                    </Typography>
+                                                    <br />
+                                                    <Typography
+                                                        component="span"
+                                                        variant="body2"
+                                                        color={order.status === 'PENDING' ? 'red' : 'green'}
+                                                        sx={{ fontWeight: 'bold' }}
+                                                    >
+                                                        {order.status}
+                                                    </Typography>
+                                                    <br />
+                                                    Created At: {new Date(order.createdAt).toLocaleDateString()}
+                                                </>
+                                            }
+                                        />
+                                    </ListItem>
+                                    <Divider sx={{ bgcolor: '#444' }} />
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </Box>
                 </Container>
             </Box>
         </Box>
