@@ -18,6 +18,8 @@ import ProductDetail from './features/product/ProductDetail';
 import Library from './features/library/Library';
 import StoreComponent from './features/storeComponent/StoreComponent';
 import Payment from './features/shop/checkout/Payment';
+import AdminRoute from './features/Dashboard/AdminRoute';
+import AdminDashboard from './features/Dashboard/AdminDashboard';
 
 function App() {
   return (
@@ -41,6 +43,11 @@ function App() {
             <Route path="/checkout" element={<Payment />} />
             <Route path="/Product/:productId" element={<ProductDetail />} />
           </Route>
+
+          <Route
+            path="/admin"
+            element={<AdminRoute element={<AdminDashboard />} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
