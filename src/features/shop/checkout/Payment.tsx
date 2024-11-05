@@ -16,8 +16,8 @@ const Payment: React.FC = () => {
     const cart = useSelector((state: RootState) => state.cartLibrary.cart);
 
     // Tính tổng tiền từ giỏ hàng
-    // const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-    const totalAmount = 3000;
+    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    // const totalAmount = 3000;
 
     const handleOrder = async () => {
         const fullName = `${firstName} ${lastName}`;
