@@ -1,4 +1,3 @@
-// AdminDashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography, Container, List, ListItem, ListItemText, Divider } from '@mui/material';
 import Sidebar from '../Dashboard/components/Sidebar';
@@ -75,6 +74,11 @@ const AdminDashboard: React.FC = () => {
                                                         {order.fullName} - {order.email}
                                                     </Typography>
                                                     <br />
+
+                                                    <Typography component="span" variant="body2" color="white">
+                                                        Amount: ${order.amount}
+                                                    </Typography>
+                                                    <br />
                                                     <Typography
                                                         component="span"
                                                         variant="body2"
@@ -84,7 +88,7 @@ const AdminDashboard: React.FC = () => {
                                                         {order.status}
                                                     </Typography>
                                                     <br />
-                                                    Created At: {new Date(order.createdAt).toLocaleDateString()}
+
                                                 </>
                                             }
                                         />

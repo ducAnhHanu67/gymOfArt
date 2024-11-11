@@ -21,6 +21,7 @@ import Payment from './features/shop/checkout/Payment';
 import AdminRoute from './features/Dashboard/AdminRoute';
 import AdminDashboard from './features/Dashboard/AdminDashboard';
 import PaymentStatus from './features/shop/checkout/PaymentStatus';
+import SellAsset from './features/Assets/sellAsset';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/commissions" element={<Commissions />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/sell-asset" element={<SellAsset />} />
             <Route path="/library" element={<Library />} />
             <Route path="/store" element={<StoreComponent />} />
             <Route path="/checkout" element={<Payment />} />

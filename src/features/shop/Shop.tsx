@@ -40,7 +40,7 @@ const ShopPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://gym-of-art.azurewebsites.net/api/Product/admin-role', {
+        const response = await fetch('https://gymofart.azurewebsites.net/api/Product/admin-role', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const ShopPage: React.FC = () => {
         FEATURED & RECOMMENDED
       </h1>
 
-      <FeaturedItems items={featuredItems} />/ {/* Bạn có thể cập nhật dữ liệu FeaturedItems nếu cần */}
+      <FeaturedItems items={featuredItems} />{/* Bạn có thể cập nhật dữ liệu FeaturedItems nếu cần */}
       <ShopItemsGrid items={shopItems.map(item => ({
         id: item.product.productId,
         name: item.product.productName,
