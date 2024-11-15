@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const SellAsset: React.FC = () => {
     const [files, setFiles] = useState<string[]>([
@@ -8,6 +9,9 @@ const SellAsset: React.FC = () => {
         "tutorial.mp4",
     ]);
     const [mainImage, setMainImage] = useState<File | null>(null);
+    const [productName, setProductName] = useState<string>("");
+    const [price, setPrice] = useState<number | null>(null);
+    const [description, setDescription] = useState<string>("");
 
     const handleFileDelete = (fileName: string) => {
         setFiles(files.filter((file) => file !== fileName));
@@ -25,6 +29,36 @@ const SellAsset: React.FC = () => {
         }
     };
 
+    const handleSubmit = async () => {
+        if (!productName || !price || !mainImage) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("ProductName", productName);
+        formData.append("ProductType", "Artwork");
+        formData.append("Price", price.toString());
+        formData.append("ProductImage", mainImage);
+
+        try {
+            const response = await axios.post(
+                "https://gymofart.azurewebsites.net/api/Product",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            alert("Asset successfully submitted!");
+            console.log("Response:", response.data);
+        } catch (error) {
+            console.error("Error submitting asset:", error);
+            alert("Failed to submit the asset.");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white p-4">
             <div className="max-w-5xl w-full bg-gray-800 rounded-lg p-6">
@@ -35,6 +69,8 @@ const SellAsset: React.FC = () => {
                         <label className="block text-sm mb-2">Asset's Name</label>
                         <input
                             type="text"
+                            value={productName}
+                            onChange={(e) => setProductName(e.target.value)}
                             className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
                             placeholder="Enter asset name"
                         />
@@ -43,6 +79,8 @@ const SellAsset: React.FC = () => {
                         <label className="block text-sm mb-2">Price</label>
                         <input
                             type="number"
+                            value={price || ""}
+                            onChange={(e) => setPrice(Number(e.target.value))}
                             className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
                             placeholder="Enter price"
                         />
@@ -74,62 +112,27 @@ const SellAsset: React.FC = () => {
                         />
                     </div>
 
-                    {/* Sub Images */}
-                    <div className="mb-4">
-                        <label className="block text-sm mb-2">Sub Images</label>
-                        <div className="w-full h-40 flex items-center justify-center bg-gray-700 border border-gray-600 rounded">
-                            <span className="text-3xl font-bold text-gray-500">+</span>
-                        </div>
+                    {/* Description */}
+                    <div className="mb-4 col-span-2">
+                        <label className="block text-sm mb-2">Description</label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
+                            rows={4}
+                            placeholder="Enter description"
+                        ></textarea>
                     </div>
-
-                    {/* Type of Payment and Your Assets */}
-                    <div className="mb-4">
-                        <label className="block text-sm mb-2">Type of Payment</label>
-                        <div className="flex gap-4">
-                            <button className="bg-gray-700 px-4 py-2 rounded">QR Code</button>
-                            <button className="bg-gray-700 px-4 py-2 rounded">Upload</button>
-                        </div>
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-sm mb-2">Your Assets</label>
-                        <div className="bg-gray-700 p-4 rounded">
-                            {files.map((file, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center justify-between mb-2 last:mb-0"
-                                >
-                                    <span>{file}</span>
-                                    <button
-                                        onClick={() => handleFileDelete(file)}
-                                        className="bg-red-600 px-2 py-1 rounded text-sm"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            ))}
-                            <button
-                                onClick={handleFileAdd}
-                                className="w-full bg-gray-600 px-4 py-2 rounded mt-2"
-                            >
-                                +
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Description */}
-                <div className="mb-4">
-                    <label className="block text-sm mb-2">Description</label>
-                    <textarea
-                        className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
-                        rows={4}
-                        placeholder="Enter description"
-                    ></textarea>
                 </div>
 
                 {/* Sell Button */}
                 <div className="text-right">
-                    <button className="bg-pink-600 px-6 py-2 rounded text-white">Sell</button>
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-pink-600 px-6 py-2 rounded text-white"
+                    >
+                        Sell
+                    </button>
                 </div>
             </div>
         </div>
