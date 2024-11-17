@@ -11,7 +11,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SIGNUP_URL = `${import.meta.env.VITE_API_URL}/Auth/register`;
+const SIGNUP_URL = `https://gymofart.azurewebsites.net/api/Auth/register`;
 
 export function SignUp() {
   const [email, setEmail] = useRecoilState(emailState);
@@ -23,15 +23,15 @@ export function SignUp() {
 
   const handleSignUp = async () => {
     const formData = new FormData();
-    formData.append('Email', email);
-    formData.append('Password', password);
-    formData.append('Role', 'Admin');
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('role', 'User');
     console.log(formData);
 
     try {
       const response = await axios.post(SIGNUP_URL, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       });
 

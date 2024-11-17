@@ -1,19 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search, Coffee, ChevronDown, Bell, User, Menu, ShoppingCart, Trash2 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { Product, removeFromCart } from '../../../redux/cartLibrarySlice';
 
 export default function Header() {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
+  const dispatch = useDispatch();
   const cartRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Lấy danh sách sản phẩm trong giỏ hàng từ Redux store
   const cartItems = useSelector((state: RootState) => state.cartLibrary.cart);
+
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
@@ -23,11 +28,17 @@ export default function Header() {
     dispatch(removeFromCart(id));
   };
 
-  // Đóng giỏ hàng khi click bên ngoài
+  // Đóng các toggle khi click bên ngoài
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
+      if (
+        cartRef.current &&
+        !cartRef.current.contains(event.target as Node) &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
         setIsCartOpen(false);
+        setIsUserMenuOpen(false);
       }
     };
 
@@ -120,22 +131,22 @@ export default function Header() {
             )}
           </div>
 
-          {/* Nút User */}
-          <div className="relative group">
+          <div className="relative" ref={userMenuRef}>
             <button
-              onClick={() => navigate('/profile')}
+              onClick={toggleUserMenu}
               className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2"
             >
               <User size={24} />
             </button>
-            <div
-              className="absolute right-0 mt-2 w-48 bg-[#2c2c3f] text-white rounded-lg shadow-lg py-2 z-50 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300"
-            >
-              <Link to="/library" className="block px-4 py-2 hover:bg-[#3c3c4f]">My library</Link>
-              <Link to="/store" className="block px-4 py-2 hover:bg-[#3c3c4f]">My store</Link>
-              <Link to="/buy-coffee" className="block px-4 py-2 hover:bg-[#3c3c4f]">Buy GoA a coffee</Link>
-              <Link to="/logout" className="block px-4 py-2 hover:bg-[#3c3c4f]">Log Out</Link>
-            </div>
+            {isUserMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-[#2c2c3f] text-white rounded-lg shadow-lg py-2 z-50">
+                <Link to="/library" className="block px-4 py-2 hover:bg-[#3c3c4f]">My library</Link>
+                <Link to="/store" className="block px-4 py-2 hover:bg-[#3c3c4f]">My store</Link>
+                <Link to="/profile" className="block px-4 py-2 hover:bg-[#3c3c4f]">My Profile</Link>
+                <Link to="/buy-coffee" className="block px-4 py-2 hover:bg-[#3c3c4f]">Buy GoA a coffee</Link>
+                <Link to="/logout" className="block px-4 py-2 hover:bg-[#3c3c4f]">Log Out</Link>
+              </div>
+            )}
           </div>
           <button className="transition duration-300 ease-in-out hover:text-[#f5a97f]">
             <Menu size={24} />

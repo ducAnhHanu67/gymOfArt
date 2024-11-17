@@ -85,9 +85,17 @@ const Discover: React.FC = () => {
   return (
     <Box sx={{ display: 'flex', backgroundColor: '#1f1f30', color: 'white', minHeight: '100vh', padding: 3 }}>
       {/* Main Content */}
-      <Box className="post-section" sx={{ flex: 2.5, paddingRight: 2, height: '100vh', overflowY: 'auto' }}>
+      <Box
+        className="post-section"
+        sx={{
+          flex: 8, // Tăng tỷ lệ chiều rộng của phần này để chiếm 80%
+          paddingRight: 2,
+          height: '100vh',
+          overflowY: 'auto',
+        }}
+      >
         {/* Post Input Area */}
-        <Paper sx={{ padding: 2, backgroundColor: '#333348', borderRadius: 2, marginBottom: 3 }}>
+        <Paper sx={{ padding: 2, backgroundColor: '#333348', borderRadius: 2, marginBottom: 3, width: '90%' }}>
           <Box display="flex" alignItems="center" mb={1}>
             <Avatar src="https://picsum.photos/50?random=6" />
             <Box alignItems="center" ml={2} flex={1}>
@@ -134,7 +142,7 @@ const Discover: React.FC = () => {
 
         {/* Post List */}
         {posts.map((post, index) => (
-          <Paper key={index} sx={{ padding: 2, backgroundColor: '#333348', borderRadius: 2, marginBottom: 3 }}>
+          <Paper key={index} sx={{ padding: 2, backgroundColor: '#333348', borderRadius: 2, marginBottom: 3, width: '90%', }}>
             <Box display="flex" alignItems="center" mb={2}>
               <Avatar src={post.userImage} />
               <Box sx={{ color: 'white' }} ml={2} flex={1}>
@@ -176,11 +184,12 @@ const Discover: React.FC = () => {
         ))}
       </Box>
 
+
       {/* Sidebar */}
       <Box sx={{ width: 300, paddingLeft: 2 }}>
         <Box
           sx={{
-            position: 'fixed',
+            // position: 'fixed',
             width: 300,
             height: '100vh',
             display: 'flex',
