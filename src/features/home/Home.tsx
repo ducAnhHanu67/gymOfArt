@@ -1,39 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 import { Box, Typography, Paper, Button, Grid } from '@mui/material';
 import './Home.css';
 
-// Mảng chứa URL ngẫu nhiên của 16 ảnh từ Internet
-const dummyImages = [
-  "https://picsum.photos/300/200?random=1",
-  "https://picsum.photos/300/200?random=2",
-  "https://picsum.photos/300/300?random=3",
-  "https://picsum.photos/200/300?random=4",
-  "https://picsum.photos/400/300?random=5",
-  "https://picsum.photos/300/400?random=6",
-  "https://picsum.photos/250/300?random=7",
-  "https://picsum.photos/300/250?random=8",
-  "https://picsum.photos/300/200?random=9",
-  "https://picsum.photos/300/300?random=10",
-  "https://picsum.photos/200/300?random=11",
-  "https://picsum.photos/400/300?random=12",
-  "https://picsum.photos/300/400?random=13",
-  "https://picsum.photos/250/300?random=14",
-  "https://picsum.photos/300/250?random=15",
-  "https://picsum.photos/300/200?random=16"
-];
-
-const trendingTags = [
-  { tag: '#Character design', color: 'gray' },
-  { tag: '#conceptart', color: 'yellow' },
-  { tag: '#background_game', color: 'gray' },
-  { tag: '#illustration', color: 'gray' },
-  { tag: '#pencil drawing', color: 'gray' },
-  { tag: '#Fan-art', color: 'green' },
-  { tag: '#fantasy', color: 'gray' }
-];
-
 const Home: React.FC = () => {
+  const [images, setImages] = useState<string[]>([]); // State để lưu URL ảnh
+
+  // Hàm fetch dữ liệu từ API
+  const fetchArtworkImages = async () => {
+    try {
+      const response = await fetch(
+        'https://gymofart.azurewebsites.net/api/Artwork/admin-role',
+        {
+          method: 'GET',
+          headers: {
+            accept: 'text/plain',
+          },
+        }
+      );
+      const data = await response.json();
+
+      // Lấy danh sách URL ảnh từ API response
+      const imageUrls = data.map((item: any) => item.image.imageUrl);
+      setImages(imageUrls); // Cập nhật state
+    } catch (error) {
+      console.error('Error fetching artwork data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArtworkImages(); // Gọi hàm fetch khi component được mount
+  }, []);
+
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -50,12 +48,12 @@ const Home: React.FC = () => {
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {dummyImages.map((src, index) => (
+          {images.map((src, index) => (
             <Paper key={index} className="masonry-item">
               <Box
                 component="img"
                 src={src}
-                alt={`image ${index + 1}`}
+                alt={`Artwork ${index + 1}`}
                 sx={{ width: '100%', borderRadius: 1 }}
               />
             </Paper>
@@ -71,7 +69,7 @@ const Home: React.FC = () => {
             Popular
           </Typography>
           <Grid container spacing={1}>
-            {dummyImages.slice(0, 4).map((src, index) => (
+            {images.slice(0, 4).map((src, index) => (
               <Grid item xs={6} key={index}>
                 <Box
                   component="img"
@@ -98,13 +96,13 @@ const Home: React.FC = () => {
             Trending
           </Typography>
           <Box>
-            {trendingTags.map((tag, index) => (
+            {['#Character design', '#conceptart', '#background_game'].map((tag, index) => (
               <Typography
                 key={index}
                 variant="body2"
-                sx={{ color: tag.color, marginBottom: 0.5 }}
+                sx={{ color: 'gray', marginBottom: 0.5 }}
               >
-                {tag.tag}
+                {tag}
               </Typography>
             ))}
           </Box>

@@ -22,6 +22,7 @@ import AdminRoute from './features/Dashboard/AdminRoute';
 import AdminDashboard from './features/Dashboard/AdminDashboard';
 import PaymentStatus from './features/shop/checkout/PaymentStatus';
 import SellAsset from './features/Assets/sellAsset';
+import Profile from './features/profile/Profile';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/payment-success" element={<PaymentStatus />} />
             <Route path="/payment-cancel" element={<PaymentStatus />} />
             <Route path="/Product/:productId" element={<ProductDetail />} />
+            <Route path="/Profile" element={<Profile />} />
           </Route>
 
           <Route

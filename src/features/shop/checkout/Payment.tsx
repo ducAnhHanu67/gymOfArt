@@ -134,11 +134,33 @@ const Payment: React.FC = () => {
                         <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
                         <div className="space-y-4">
                             {cart.map((item) => (
-                                <div key={item.id} className="flex justify-between items-center p-3 rounded bg-[#3c3c4f]">
-                                    <span>{item.name}</span>
-                                    <span>{item.price} VND</span>
+                                <div
+                                    key={item.id}
+                                    className="flex justify-between items-center p-3 rounded bg-[#3c3c4f]"
+                                >
+                                    {/* Image */}
+                                    <div className="w-16 h-16 flex-shrink-0">
+                                        {item.image ? (
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                className="w-full h-full object-cover rounded"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-700 flex items-center justify-center rounded">
+                                                <span className="text-sm text-gray-400">No Image</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Product Details */}
+                                    <div className="flex-1 pl-4">
+                                        <span className="block text-white font-medium">{item.name}</span>
+                                        <span className="block text-gray-400 text-sm">{item.price} VND</span>
+                                    </div>
                                 </div>
                             ))}
+
                         </div>
 
                         {/* Discount Code */}
