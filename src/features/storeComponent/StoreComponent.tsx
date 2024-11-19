@@ -30,7 +30,13 @@ const StoreComponent: React.FC = () => {
                     <button className="w-full bg-transparent border border-gray-600 text-white rounded-md p-3 mt-6">
                         Create a new folder
                     </button>
+                    <button className="w-full bg-pink-500 text-white rounded-md p-3 mt-4"
+                        onClick={() => navigate('/sell-asset')}
+                    >
+                        Sell Your Assets
+                    </button>
                 </div>
+
                 {/* Main Content */}
                 <div className="w-3/4">
                     <div className="flex justify-between items-center mb-4">
