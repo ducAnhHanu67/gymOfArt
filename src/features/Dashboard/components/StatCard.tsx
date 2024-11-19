@@ -9,6 +9,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 interface StatCardProps {
     title: string;
+    number: number;
 }
 
 // Dữ liệu mẫu cho biểu đồ, đảm bảo đúng kiểu dữ liệu
@@ -44,7 +45,7 @@ const options = {
     },
 };
 
-const StatCard: React.FC<StatCardProps> = ({ title }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, number }) => {
     // Tùy chỉnh màu sắc cho từng StatCard dựa trên title
     const backgroundColor = title === 'Feedback' ? '#206ec8' : '#e74863';
 
@@ -68,7 +69,7 @@ const StatCard: React.FC<StatCardProps> = ({ title }) => {
                 <Bar data={chartData} options={options} />
             </Box>
             <Typography variant="body2" sx={{ color: '#566b9b', mt: 1 }}>Total</Typography>
-            <Typography variant="h4" sx={{ color: '#FFD700', fontWeight: 'bold' }}>00</Typography>
+            <Typography variant="h4" sx={{ color: '#FFD700', fontWeight: 'bold' }}>{number}</Typography>
         </Box>
     );
 };

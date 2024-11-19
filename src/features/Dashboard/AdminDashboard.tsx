@@ -16,8 +16,14 @@ interface Order {
     createdAt: string;
 }
 
+interface AccountCount {
+    user: number;
+    artist: number;
+}
+
 const AdminDashboard: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [accountCount, setAccountCount] = useState<AccountCount>({ user: 0, artist: 0 });
 
     useEffect(() => {
         // Gọi API để lấy danh sách đơn hàng
@@ -31,7 +37,19 @@ const AdminDashboard: React.FC = () => {
             }
         };
 
+        // Gọi API để lấy số lượng user và artist
+        const fetchAccountCount = async () => {
+            try {
+                const response = await fetch("https://gymofart.azurewebsites.net/api/Account/count");
+                const data = await response.json();
+                setAccountCount(data);
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin số lượng tài khoản:", error);
+            }
+        };
+
         fetchOrders();
+        fetchAccountCount();
     }, []);
 
     return (
@@ -47,13 +65,13 @@ const AdminDashboard: React.FC = () => {
 
                     <Grid container spacing={3} sx={{ mt: 2 }}>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Artwork" />
+                            <StatCard title="User" number={accountCount.user} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Feedback" />
+                            <StatCard title="Feedback" number={10} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Artist" />
+                            <StatCard title="Artist" number={accountCount.artist} />
                         </Grid>
                     </Grid>
 
@@ -88,7 +106,6 @@ const AdminDashboard: React.FC = () => {
                                                         {order.status}
                                                     </Typography>
                                                     <br />
-
                                                 </>
                                             }
                                         />
