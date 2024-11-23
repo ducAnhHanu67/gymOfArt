@@ -72,7 +72,7 @@ export default function Header() {
             <Coffee size={18} />
             <span>Buy GoA a coffee</span>
           </button>
-          <button className="flex items-center space-x-2 transition duration-300 ease-in-out hover:text-[#f5a97f]">
+          {/* <button className="flex items-center space-x-2 transition duration-300 ease-in-out hover:text-[#f5a97f]">
             <img
               src="/placeholder.svg?height=24&width=24"
               alt="English flag"
@@ -80,7 +80,7 @@ export default function Header() {
             />
             <span>English</span>
             <ChevronDown size={18} />
-          </button>
+          </button> */}
           <button className="transition duration-300 ease-in-out hover:text-[#f5a97f] rounded-full bg-gray-700 hover:bg-gray-800 p-2">
             <Bell size={24} />
           </button>

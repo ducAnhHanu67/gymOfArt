@@ -34,6 +34,7 @@ export default function LoginForm() {
         }
       );
       console.log('Login step 1 successful:', response.data);
+      localStorage.setItem('accountId', response.data.accountId);
       setStep(2);
       toast.success('OTP sent to your email.');
     } catch (error) {

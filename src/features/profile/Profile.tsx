@@ -3,13 +3,14 @@ import { BookOpen, ChevronDown, Star, Upload } from "lucide-react";
 
 const Profile: React.FC = () => {
     const [profileData, setProfileData] = useState<any>(null);
+    const accountId = localStorage.getItem('accountId');
 
     useEffect(() => {
         // Tải dữ liệu từ API
         const fetchData = async () => {
             try {
                 const response = await fetch(
-                    "https://gymofart.azurewebsites.net/api/Account/ACC0001"
+                    `https://gymofart.azurewebsites.net/api/Account/${accountId}`
                 );
                 const data = await response.json();
                 setProfileData(data);
