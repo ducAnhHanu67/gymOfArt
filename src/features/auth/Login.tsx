@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { authState } from './authState';
+import { useSetRecoilState } from 'recoil';
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,27 +13,29 @@ export default function LoginForm() {
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1);
 
-  console.log("API URL:", import.meta.env.VITE_API_URL);
+  const setAuthState = useSetRecoilState(authState);
+  const navigate = useNavigate();
+
+  const API_URL = 'https://gymofart.azurewebsites.net/api';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/Auth/login`,
+        `${API_URL}/Auth/login`,
         {
           email: email,
           password: password,
         },
         {
           headers: {
-            'Content-Type': 'application/json', // Chuyển sang kiểu JSON
+            'Content-Type': 'application/json',
           },
         }
       );
       console.log('Login step 1 successful:', response.data);
       setStep(2);
       toast.success('OTP sent to your email.');
-      console.log(response.data);
     } catch (error) {
       console.error('Login failed:', error);
       toast.error('Login failed. Please check your credentials.');
@@ -42,17 +46,23 @@ export default function LoginForm() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/Auth/confirm-otp-login?inputOtp=${otp}`,
+        `${API_URL}/Auth/confirm-otp-login?inputOtp=${otp}`,
         {},
         {
           headers: {
             accept: 'text/plain',
+            'Content-Type': 'application/json',
           },
         }
       );
       console.log('OTP validation successful:', response.data);
       toast.success('Login successful!');
-      // Handle successful login, e.g., store tokens, redirect to dashboard
+
+      // Cập nhật trạng thái đăng nhập
+      setAuthState({ isAuthenticated: true });
+
+      // Điều hướng tới trang chính
+      navigate('/');
     } catch (error) {
       console.error('OTP validation failed:', error);
       toast.error('Invalid OTP. Please try again.');

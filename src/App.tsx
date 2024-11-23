@@ -23,17 +23,28 @@ import AdminDashboard from './features/Dashboard/AdminDashboard';
 import PaymentStatus from './features/shop/checkout/PaymentStatus';
 import SellAsset from './features/Assets/sellAsset';
 import Profile from './features/profile/Profile';
+import { PrivateRoute } from './PrivateRoute';
 
 function App() {
   return (
     <RecoilRoot>
       <Router>
         <Routes>
+          {/* Định nghĩa các route công khai */}
           <Route path="/auth" element={<AuthTemplate />}>
             <Route path="sign-up" element={<SignUp />} />
             <Route path="login" element={<Login />} />
           </Route>
-          <Route path="/" element={<CommonLayout />}>
+
+          {/* Bảo vệ các route chính */}
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <CommonLayout />
+              </PrivateRoute>
+            }
+          >
             <Route index element={<Home />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/following" element={<Following />} />
@@ -51,10 +62,13 @@ function App() {
             <Route path="/Profile" element={<Profile />} />
           </Route>
 
+          {/* Admin route */}
           <Route
             path="/admin"
             element={<AdminRoute element={<AdminDashboard />} />}
           />
+
+          {/* Route không tìm thấy */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
@@ -62,5 +76,6 @@ function App() {
     </RecoilRoot>
   );
 }
+
 
 export default App;
