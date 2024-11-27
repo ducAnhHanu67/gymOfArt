@@ -26,6 +26,14 @@ const StoreComponent: React.FC = () => {
         setSelectedProduct(null);
     };
 
+    // Mở ảnh trong cửa sổ mới
+    const handleOpenImageInNewWindow = () => {
+        if (selectedProduct?.image) {
+            // Mở cửa sổ mới với URL của ảnh
+            window.open(selectedProduct.image, '_blank');
+        }
+    };
+
     return (
         <div className="bg-[#1F1F30] text-white min-h-screen p-6">
             {/* Header */}
@@ -120,14 +128,17 @@ const StoreComponent: React.FC = () => {
                             <p className="text-gray-400">By: {selectedProduct.author}</p>
                             <p className="text-gray-400">Date: {selectedProduct.date}</p>
                         </div>
+
+                        {/* Download Button */}
                         <div className="flex justify-between items-center">
-                            <a
-                                // href={selectedProduct.downloadLink} // Giả sử sản phẩm có thuộc tính downloadLink
-                                className="bg-pink-500 text-white px-4 py-2 rounded-md"
-                                download
-                            >
-                                Download
-                            </a>
+                            {selectedProduct.image && (
+                                <button
+                                    className="bg-pink-500 text-white px-4 py-2 rounded-md"
+                                    onClick={handleOpenImageInNewWindow} // Mở cửa sổ mới hiển thị ảnh
+                                >
+                                    Download Image
+                                </button>
+                            )}
                             <button
                                 className="bg-gray-600 text-white px-4 py-2 rounded-md"
                                 onClick={handleClosePopup}
