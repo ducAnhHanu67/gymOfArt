@@ -41,7 +41,7 @@ const Payment: React.FC = () => {
 
         try {
             // Gửi yêu cầu đến server Express
-            const response = await fetch("http://localhost:3030/create-embedded-payment-link", {
+            const response = await fetch("https://begymofart.onrender.com/create-embedded-payment-link", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

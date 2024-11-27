@@ -17,7 +17,7 @@ const PaymentStatus: React.FC = () => {
             setStatusMessage('Thanh toán thành công! Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.');
 
             // Cập nhật trạng thái đơn hàng trên server
-            fetch('http://localhost:3030/payment-success', {
+            fetch('https://begymofart.onrender.com/payment-success', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

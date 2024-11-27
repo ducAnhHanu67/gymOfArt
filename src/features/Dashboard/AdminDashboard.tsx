@@ -29,7 +29,7 @@ const AdminDashboard: React.FC = () => {
         // Gọi API để lấy danh sách đơn hàng
         const fetchOrders = async () => {
             try {
-                const response = await fetch("http://localhost:3030/orders");
+                const response = await fetch("https://begymofart.onrender.com/orders");
                 const data = await response.json();
                 setOrders(data);
             } catch (error) {
