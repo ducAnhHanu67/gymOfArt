@@ -1,5 +1,4 @@
-// src/components/Library.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store'; // Đảm bảo đường dẫn chính xác đến store.ts
@@ -9,8 +8,22 @@ const StoreComponent: React.FC = () => {
     const navigate = useNavigate();
     const cartItems = useSelector((state: RootState) => state.cartLibrary.cart);
 
+    // Trạng thái để mở popup tải về
+    const [showDownloadPopup, setShowDownloadPopup] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
     const handleSwitchToLibrary = () => {
         navigate('/library');
+    };
+
+    const handleProductClick = (product: Product) => {
+        setSelectedProduct(product);
+        setShowDownloadPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowDownloadPopup(false);
+        setSelectedProduct(null);
     };
 
     return (
@@ -49,7 +62,11 @@ const StoreComponent: React.FC = () => {
                     {/* Product Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {cartItems.map((product: Product) => (
-                            <div key={product.id} className="bg-[#333348] p-4 rounded-lg">
+                            <div
+                                key={product.id}
+                                className="bg-[#333348] p-4 rounded-lg cursor-pointer"
+                                onClick={() => handleProductClick(product)} // Mở popup khi nhấp vào sản phẩm
+                            >
                                 {/* Image */}
                                 <div className="h-40 bg-[#ff3366] flex items-center justify-center mb-4">
                                     {product.image ? (
@@ -75,6 +92,52 @@ const StoreComponent: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Popup Download */}
+            {showDownloadPopup && selectedProduct && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-[#1F1F30] p-6 rounded-lg max-w-md w-full">
+                        <h3 className="text-2xl font-semibold text-white mb-4">Download {selectedProduct.name}</h3>
+
+                        {/* Show Image in Popup */}
+                        <div className="mb-4">
+                            <div className="h-40 bg-[#ff3366] flex items-center justify-center mb-4">
+                                {selectedProduct.image ? (
+                                    <img
+                                        src={selectedProduct.image}
+                                        alt={selectedProduct.name}
+                                        className="h-full w-full object-cover rounded-md"
+                                    />
+                                ) : (
+                                    <span className="text-white">No Image</span>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <p className="text-gray-400">Product: {selectedProduct.name}</p>
+                            <p className="text-gray-400">Category: {selectedProduct.category}</p>
+                            <p className="text-gray-400">By: {selectedProduct.author}</p>
+                            <p className="text-gray-400">Date: {selectedProduct.date}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <a
+                                // href={selectedProduct.downloadLink} // Giả sử sản phẩm có thuộc tính downloadLink
+                                className="bg-pink-500 text-white px-4 py-2 rounded-md"
+                                download
+                            >
+                                Download
+                            </a>
+                            <button
+                                className="bg-gray-600 text-white px-4 py-2 rounded-md"
+                                onClick={handleClosePopup}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

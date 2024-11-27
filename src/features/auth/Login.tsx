@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -17,6 +17,15 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const API_URL = 'https://gymofart.azurewebsites.net/api';
+
+  // Kiểm tra trạng thái đăng nhập khi tải lại trang
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    if (isAuthenticated === 'true') {
+      setAuthState({ isAuthenticated: true });
+      navigate('/'); // Điều hướng đến trang chính nếu đã đăng nhập
+    }
+  }, [navigate, setAuthState]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,8 +71,15 @@ export default function LoginForm() {
       // Cập nhật trạng thái đăng nhập
       setAuthState({ isAuthenticated: true });
 
-      // Điều hướng tới trang chính
-      navigate('/');
+      // Lưu trạng thái đăng nhập vào localStorage
+      localStorage.setItem('isAuthenticated', 'true');
+
+      if (response.data.role === 'Admin') {
+        navigate('/admin');
+      } else {
+        // Điều hướng tới trang chính
+        navigate('/');
+      }
     } catch (error) {
       console.error('OTP validation failed:', error);
       toast.error('Invalid OTP. Please try again.');

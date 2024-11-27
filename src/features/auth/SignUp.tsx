@@ -10,6 +10,7 @@ import { SignUpPart2 } from './components/SignUpPasswordInfo';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const SIGNUP_URL = `https://gymofart.azurewebsites.net/api/Auth/register`;
 
@@ -18,6 +19,8 @@ export function SignUp() {
   const [username, setUsername] = useRecoilState(usernameState);
   const [password, setPassword] = useRecoilState(passwordState);
   const [showPart2, setShowPart2] = useState(false);
+  const navigate = useNavigate(); // Khai báo navigate
+
 
   const handleNext = () => setShowPart2(true);
 
@@ -37,6 +40,8 @@ export function SignUp() {
 
       console.log('Sign up successful:', response.data);
       toast.success('Sign up successful!');
+
+      navigate('/login');
       // Handle successful sign up, e.g., redirect to login page
     } catch (error) {
       console.error('Sign up failed:', error);

@@ -88,7 +88,7 @@ const ProductDetail: React.FC = () => {
                 <Box display="flex" alignItems="center">
                     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{item.rating}</Typography>
                     <Typography variant="body2" color="warning.main" ml={1}>★</Typography>
-                    <Typography variant="body2" color="textSecondary" ml={1}>({item.reviews?.length} reviews)</Typography>
+                    <Typography variant="body2" color="white" ml={1}>({item.reviews?.length} reviews)</Typography>
                 </Box>
             </Box>
 
@@ -107,9 +107,9 @@ const ProductDetail: React.FC = () => {
                             <img src={item.image} alt={item.name} style={{ maxWidth: '100%', maxHeight: '100%' }} />
                         </Box>
                         <Box display="flex" gap={1} mt={2}>
+                            {/* <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} />
                             <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} />
-                            <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} />
-                            <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} />
+                            <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} /> */}
                         </Box>
                         <Box mt={3}>
                             <Typography variant="h6" color="white" gutterBottom>Description</Typography>
