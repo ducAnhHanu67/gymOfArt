@@ -27,12 +27,70 @@ const StoreComponent: React.FC = () => {
     };
 
     // Mở ảnh trong cửa sổ mới
-    const handleOpenImageInNewWindow = () => {
+    // const handleOpenImageInNewWindow = () => {
+    //     if (selectedProduct?.image) {
+    //         // Mở cửa sổ mới với URL của ảnh
+    //         window.open(selectedProduct.image, '_blank');
+    //     }
+    // };
+    const handleOpenImageInNewWindow = async () => {
         if (selectedProduct?.image) {
-            // Mở cửa sổ mới với URL của ảnh
-            window.open(selectedProduct.image, '_blank');
+            try {
+                // Gửi yêu cầu GET đến API để lấy ảnh dưới dạng Blob
+                const response = await fetch(
+                    `https://gymofart.azurewebsites.net/api/Image/download?imageUrl=${selectedProduct.image}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Accept': '*/*', // Yêu cầu nhận bất kỳ kiểu dữ liệu nào
+                        },
+                    }
+                );
+
+                // Kiểm tra nếu yêu cầu thành công
+                if (response.ok) {
+                    // Lấy ảnh dưới dạng Blob
+                    const imageBlob = await response.blob();
+
+                    // Kiểm tra kiểu MIME của ảnh trả về (ví dụ: image/jpeg, image/png)
+                    const contentType = response.headers.get('Content-Type');
+                    let extension = '';
+
+                    // Xác định phần mở rộng tệp dựa trên MIME type
+                    if (contentType?.includes('jpeg')) {
+                        extension = 'jpg';
+                    } else if (contentType?.includes('png')) {
+                        extension = 'png';
+                    } else if (contentType?.includes('gif')) {
+                        extension = 'gif';
+                    } else {
+                        extension = 'jpg'; // Mặc định là jpg nếu không xác định được
+                    }
+
+                    // Tạo URL đối tượng từ Blob
+                    const imageUrl = URL.createObjectURL(imageBlob);
+
+                    // Tạo một thẻ <a> để tải ảnh xuống
+                    const link = document.createElement('a');
+                    link.href = imageUrl;
+                    link.download = `${selectedProduct.name || 'download'}.${extension}`; // Đặt tên tệp tải về
+
+                    // Kích hoạt download
+                    link.click();
+
+                    // Giải phóng URL đối tượng sau khi tải xong
+                    URL.revokeObjectURL(imageUrl);
+                } else {
+                    console.error('Error downloading image:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Failed to fetch image:', error);
+            }
         }
     };
+
+
+
 
     return (
         <div className="bg-[#1F1F30] text-white min-h-screen p-6">
