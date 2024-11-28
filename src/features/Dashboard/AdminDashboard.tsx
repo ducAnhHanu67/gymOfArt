@@ -4,6 +4,7 @@ import Sidebar from '../Dashboard/components/Sidebar';
 import Header from '../Dashboard/components/Header';
 import StatCard from '../Dashboard/components/StatCard';
 import EventList from '../Dashboard/components/EventList';
+import StatCardArt from './components/StatCardArt';
 
 interface Order {
     id: number;
@@ -75,7 +76,10 @@ const AdminDashboard: React.FC = () => {
                             <StatCard title="Total revenue" number={totalRevenue} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Artist" number={accountCount.artist} />
+                            <StatCardArt title="Number User & Artist"
+                                user={accountCount.user}
+                                artist={accountCount.artist}
+                                number={accountCount.artist} />
                         </Grid>
                     </Grid>
 
