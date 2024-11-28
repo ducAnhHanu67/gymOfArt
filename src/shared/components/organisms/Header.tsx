@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search, Coffee, ChevronDown, Bell, User, Menu, ShoppingCart, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { Product, removeFromCart } from '../../../redux/cartLibrarySlice';
@@ -10,6 +10,7 @@ export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -26,6 +27,12 @@ export default function Header() {
 
   const handleRemoveFromCart = (id: string) => {
     dispatch(removeFromCart(id));
+  };
+  const handleLogout = () => {
+    // Xóa 'isAuthenticated' khỏi localStorage khi logout
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('accountId'); // Nếu cần xóa thêm các thông tin khác liên quan đến người dùng
+    navigate('/auth/login'); // Điều hướng về trang đăng nhập
   };
 
   // Đóng các toggle khi click bên ngoài
@@ -144,7 +151,7 @@ export default function Header() {
                 <Link to="/store" className="block px-4 py-2 hover:bg-[#3c3c4f]">My store</Link>
                 <Link to="/profile" className="block px-4 py-2 hover:bg-[#3c3c4f]">My Profile</Link>
                 <Link to="/buy-coffee" className="block px-4 py-2 hover:bg-[#3c3c4f]">Buy GoA a coffee</Link>
-                <Link to="/logout" className="block px-4 py-2 hover:bg-[#3c3c4f]">Log Out</Link>
+                <button onClick={handleLogout} className="block px-4 py-2 hover:bg-[#3c3c4f]">Log Out</button>
               </div>
             )}
           </div>
