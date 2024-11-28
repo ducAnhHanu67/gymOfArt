@@ -65,13 +65,13 @@ const AdminDashboard: React.FC = () => {
 
                     <Grid container spacing={3} sx={{ mt: 2 }}>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="User" number={accountCount.user} />
+                            <StatCard title="Order" number={accountCount.user} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <StatCard title="Feedback" number={10} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Artist" number={accountCount.artist} />
+                            <StatCard title="Total revenue" number={accountCount.artist} />
                         </Grid>
                     </Grid>
 
