@@ -45,7 +45,7 @@ const ProductDetail: React.FC = () => {
                 const productData: Product = {
                     id: data.product.productId,
                     name: data.product.productName,
-                    price: data.product.price / 1000, // Chuyển giá sang đơn vị nghìn
+                    price: data.product.price, // Chuyển giá sang đơn vị nghìn
                     description: data.product.productType,
                     date: new Date(data.product.createdAt).toLocaleDateString(),
                     image: data.imageUrl,
@@ -103,8 +103,16 @@ const ProductDetail: React.FC = () => {
             <Grid container spacing={4} mt={3}>
                 <Grid item xs={8}>
                     <Paper sx={{ backgroundColor: '#333348', p: 2 }}>
-                        <Box sx={{ height: 300, backgroundColor: '#ff3366', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <img src={item.image} alt={item.name} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                        <Box sx={{ height: 300, backgroundColor: '#ff3366', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                            <img
+                                src={item.image}
+                                alt={item.name}
+                                style={{
+                                    objectFit: 'contain',   // Giữ tỷ lệ của ảnh và làm vừa vặn trong box
+                                    maxWidth: '100%',       // Chiều rộng tối đa là 100% chiều rộng của box
+                                    maxHeight: '100%',      // Chiều cao tối đa là 100% chiều cao của box
+                                }}
+                            />
                         </Box>
                         <Box display="flex" gap={1} mt={2}>
                             {/* <Box sx={{ width: 80, height: 80, backgroundColor: '#ff3366' }} />

@@ -156,7 +156,9 @@ const Payment: React.FC = () => {
                                     {/* Product Details */}
                                     <div className="flex-1 pl-4">
                                         <span className="block text-white font-medium">{item.name}</span>
-                                        <span className="block text-gray-400 text-sm">{item.price} VND</span>
+                                        <span className="block text-gray-400 text-sm">
+                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                                        </span>
                                     </div>
                                 </div>
                             ))}
@@ -175,7 +177,11 @@ const Payment: React.FC = () => {
                         </div>
                         <div className="flex justify-between items-center mt-6 text-lg font-semibold">
                             <span>Total</span>
-                            <span>{totalAmount} VND</span>
+                            <span>
+
+                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalAmount)}
+
+                            </span>
                         </div>
                     </div>
                 </div>

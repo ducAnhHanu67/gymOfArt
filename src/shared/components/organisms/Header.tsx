@@ -117,7 +117,9 @@ export default function Header() {
                         <img src={item.image} alt={item.name} className="w-12 h-12 rounded mr-3" />
                         <div className="flex-1">
                           <h4 className="font-medium">{item.name}</h4>
-                          <p className="text-sm text-gray-400">${item.price.toFixed(2)}</p>
+                          <p className="text-sm text-gray-400">
+                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                          </p>
                         </div>
                         <button
                           onClick={() => handleRemoveFromCart(item.id)}

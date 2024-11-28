@@ -21,7 +21,10 @@ const Home: React.FC = () => {
       const data = await response.json();
 
       // Lấy danh sách URL ảnh từ API response
-      const imageUrls = data.map((item: any) => item.image.imageUrl);
+      const imageUrls = data
+        .map((item: any) => item?.image?.imageUrl)  // Lấy các giá trị imageUrl
+        .filter((url: any) => url !== undefined);
+
       setImages(imageUrls); // Cập nhật state
     } catch (error) {
       console.error('Error fetching artwork data:', error);
