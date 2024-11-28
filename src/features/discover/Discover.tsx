@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import axios để gọi API
 import SendIcon from '@mui/icons-material/Send';
 import {
   Box,
@@ -14,34 +15,8 @@ import {
 } from '@mui/material';
 import { Favorite, ChatBubbleOutline, Share, Image, InsertEmoticon, Add } from '@mui/icons-material';
 
-const posts = [
-  {
-    username: 'A-lam',
-    userImage: 'https://picsum.photos/50?random=1',
-    image: 'https://picsum.photos/600/300?random=1',
-    description: 'The art of an artist\nHello friends, this is one of the scenes from my project in college.',
-    likes: 20,
-    comments: 12,
-    shares: 3,
-  },
-  {
-    username: 'Noah',
-    userImage: 'https://picsum.photos/50?random=2',
-    image: 'https://picsum.photos/600/300?random=2',
-    description: 'The art of an artist\nHello friends, this is one of the scenes from my project in college.',
-    likes: 20,
-    comments: 12,
-    shares: 3,
-  },
-];
-
-const discussions = [
-  { username: 'Phong Van', text: 'Your artwork must be like this...', userImage: 'https://picsum.photos/50?random=3' },
-  { username: 'Shiba', text: 'Check my feedback box, you miss this.', userImage: 'https://picsum.photos/50?random=4' },
-  { username: 'Tom', text: 'Hey! Check my feedback box, you miss this.', userImage: 'https://picsum.photos/50?random=5' },
-];
-
 const Discover: React.FC = () => {
+  const [posts, setPosts] = useState<any[]>([]);  // State để lưu các bài viết
   const [openImageDialog, setOpenImageDialog] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [postText, setPostText] = useState<string>('');
@@ -77,10 +52,61 @@ const Discover: React.FC = () => {
         text: commentText,
         userImage: 'https://picsum.photos/50?random=6',
       };
-      discussions.push(newComment); // Thêm bình luận mới vào danh sách
+      // Chú ý: Bạn cần update lại state khi thêm bình luận
       setCommentText(''); // Reset lại ô nhập bình luận
     }
   };
+  // Hàm để gửi bài đăng lên API
+  const handlePost = async () => {
+    if (!postText || !uploadedImage) {
+      alert('Vui lòng điền đầy đủ thông tin và chọn ảnh.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('Title', postText); // Thêm tiêu đề
+    formData.append('Description', ''); // Thêm mô tả, bạn có thể thay đổi sau
+    const imageBlob = await fetch(uploadedImage).then(res => res.blob());
+    formData.append('Image', imageBlob, 'image.png'); // Thêm ảnh
+
+    try {
+      const response = await axios.post(
+        'https://gymofart.azurewebsites.net/api/Artwork/upload-artwork',
+        formData,
+        {
+          headers: {
+            'accept': 'text/plain',
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      console.log('Bài đăng thành công:', response.data);
+
+      // Sau khi gửi bài thành công, gọi lại API để lấy dữ liệu mới
+      const postsResponse = await axios.get('https://gymofart.azurewebsites.net/api/Artwork/discovery');
+      // Sắp xếp các bài viết sao cho bài đăng mới nhất được hiển thị lên đầu
+      // const sortedPosts = [response.data, ...postsResponse.data];
+      setPosts(postsResponse.data); // Cập nhật lại state posts với danh sách bài viết mới
+
+      // Reset lại các giá trị
+      setUploadedImage(null); // Reset ảnh sau khi đăng
+      setPostText(''); // Reset nội dung bài viết
+    } catch (error) {
+      console.error('Lỗi khi gửi bài đăng:', error);
+      alert('Đã có lỗi xảy ra khi gửi bài đăng.');
+    }
+  };
+
+  // Gọi API để lấy dữ liệu các bài viết
+  useEffect(() => {
+    axios.get('https://gymofart.azurewebsites.net/api/Artwork/discovery')
+      .then(response => {
+        setPosts(response.data);  // Lưu dữ liệu bài viết vào state
+      })
+      .catch(error => {
+        console.error('Error fetching posts:', error);
+      });
+  }, []);  // Chỉ gọi một lần khi component được mount
 
   return (
     <Box sx={{ display: 'flex', backgroundColor: '#1f1f30', color: 'white', minHeight: '100vh', padding: 3 }}>
@@ -134,34 +160,34 @@ const Discover: React.FC = () => {
                 <Add />
               </IconButton>
             </Box>
-            <Button variant="contained" sx={{ backgroundColor: '#3b5998', color: 'white' }}>
+            <Button variant="contained" sx={{ backgroundColor: '#3b5998', color: 'white' }} onClick={handlePost} >
               Post
             </Button>
           </Box>
         </Paper>
 
         {/* Post List */}
-        {posts.map((post, index) => (
-          <Paper key={index} sx={{ padding: 2, backgroundColor: '#333348', borderRadius: 2, marginBottom: 3, width: '90%', }}>
+        {posts.slice().reverse().map((post, index) => (
+          <Paper key={index} sx={{ padding: 2, backgroundColor: '#333348', borderRadius: 2, marginBottom: 3, width: '90%' }}>
             <Box display="flex" alignItems="center" mb={2}>
-              <Avatar src={post.userImage} />
+              <Avatar src="https://picsum.photos/50?random=6" />
               <Box sx={{ color: 'white' }} ml={2} flex={1}>
                 <Typography variant="body1" fontWeight="bold">
-                  {post.username}
+                  {post.artworkName}
                 </Typography>
                 <Typography variant="body2" color="gray">
-                  {post.description}
+                  {post.artworkDescription}
                 </Typography>
               </Box>
               <Button variant="contained" sx={{ backgroundColor: '#3b5998', color: 'white' }}>
                 Follow
               </Button>
             </Box>
-            {post.image && (
+            {post.artworkUrl && (
               <Box
                 component="img"
-                src={post.image}
-                alt="post"
+                src={post.artworkUrl}
+                alt="artwork"
                 sx={{ width: '100%', borderRadius: 2, marginBottom: 2, cursor: 'pointer' }}
                 onClick={() => handleOpenPostDialog(post)}
               />
@@ -169,27 +195,25 @@ const Discover: React.FC = () => {
             <Box display="flex" justifyContent="space-around" color="gray">
               <Box display="flex" alignItems="center">
                 <Favorite fontSize="small" />
-                <Typography ml={0.5}>{post.likes}</Typography>
+                <Typography ml={0.5}>0</Typography>
               </Box>
               <Box display="flex" alignItems="center">
                 <ChatBubbleOutline fontSize="small" />
-                <Typography ml={0.5}>{post.comments}</Typography>
+                <Typography ml={0.5}>0</Typography>
               </Box>
               <Box display="flex" alignItems="center">
                 <Share fontSize="small" />
-                <Typography ml={0.5}>{post.shares}</Typography>
+                <Typography ml={0.5}>0</Typography>
               </Box>
             </Box>
           </Paper>
         ))}
       </Box>
 
-
       {/* Sidebar */}
       <Box sx={{ width: 300, paddingLeft: 2 }}>
         <Box
           sx={{
-            // position: 'fixed',
             width: 300,
             height: '100vh',
             display: 'flex',
@@ -202,33 +226,9 @@ const Discover: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               Discussion
             </Typography>
-            {discussions.map((discussion, index) => (
-              <Box key={index} display="flex" alignItems="center" mb={1}>
-                <Avatar src={discussion.userImage} />
-                <Box ml={2}>
-                  <Typography variant="body2" fontWeight="bold">
-                    {discussion.username}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    {discussion.text}
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
-            <Button variant="contained" fullWidth sx={{ backgroundColor: '#000', color: 'white', mt: 1 }}>
-              View All
-            </Button>
+            {/* Render discussions */}
+            {/* For now you can keep them as static or modify */}
           </Paper>
-
-          {/* Buy Coffee Button */}
-          <Box textAlign="center">
-            <Paper sx={{ backgroundColor: '#333348', padding: 2, borderRadius: 2 }}>
-              <Typography variant="body2">Buy GOA a coffee</Typography>
-              <Button variant="contained" fullWidth sx={{ backgroundColor: '#ff3366', color: 'white', mt: 1 }}>
-                Buy
-              </Button>
-            </Paper>
-          </Box>
         </Box>
       </Box>
 
@@ -243,6 +243,7 @@ const Discover: React.FC = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Post Detail Dialog */}
       <Dialog
         open={openPostDialog}
         onClose={handleClosePostDialog}
@@ -256,8 +257,7 @@ const Discover: React.FC = () => {
           },
         }}
       >
-
-        <DialogContent sx={{ height: '100%', padding: 0 }}> {/* Trừ chiều cao của DialogTitle */}
+        <DialogContent sx={{ height: '100%', padding: 0 }}>
           <Box display="flex" flexDirection="row" alignItems="stretch" height="100%">
             {/* Phần ảnh */}
             <Box
@@ -265,70 +265,40 @@ const Discover: React.FC = () => {
               justifyContent="center"
               alignItems="center"
               sx={{
-                width: '70%',  // Đặt phần chứa ảnh chiếm 70% chiều rộng
-                height: '100%', // Chiều cao chiếm toàn bộ
+                width: '70%',
+                height: '100%',
                 borderRadius: 2,
                 background: '#494949'
               }}
             >
               <Box
                 component="img"
-                src={selectedPost?.image}
+                src={selectedPost?.artworkUrl}
                 alt="post"
                 sx={{
-                  width: '100%',         // Đặt chiều rộng ảnh là 70% của phần chứa ảnh
-                  height: '60%',        // Đặt chiều cao ảnh là 60% của phần chứa ảnh
+                  width: '100%',
+                  height: '60%',
                   borderRadius: 2,
-                  objectFit: 'contain', // Đảm bảo ảnh giữ nguyên tỉ lệ trong giới hạn
+                  objectFit: 'cover'
                 }}
               />
             </Box>
 
-            {/* Phần comment */}
-            <Box width="30%" sx={{ backgroundColor: '#28283b', padding: 2, borderRadius: 2, height: '100%', overflowY: 'auto' }}>
-              {/* Thumbnail, Button Follow, and Description */}
-              <Box display="flex" alignItems="center" mb={2}>
-                <Avatar src={selectedPost?.userImage} sx={{ width: 50, height: 50 }} />
-                <Box ml={2} flex={1}>
-                  <Typography variant="body1" fontWeight="bold" color="white">
-                    {selectedPost?.username}
-                  </Typography>
-                  <Typography variant="body2" color="gray">
-                    @{selectedPost?.username}23
-                  </Typography>
-                </Box>
-                <Button variant="contained" sx={{ backgroundColor: '#3b5998', color: 'white' }}>
-                  Follow
-                </Button>
-              </Box>
-
-              {/* Description */}
-              <Typography variant="body2" color="white" mb={2}>
-                {selectedPost?.description}
+            {/* Phần chi tiết bài viết */}
+            <Box sx={{ width: '30%', height: '100%', padding: 3, background: '#333348' }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white' }}>
+                {selectedPost?.artworkName}
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'gray', marginTop: 1 }}>
+                {selectedPost?.artworkDescription}
               </Typography>
 
-              {/* Icon Section */}
-              <Box display="flex" justifyContent="space-around" color="gray" mb={2}>
-                <Box display="flex" alignItems="center">
-                  <Favorite fontSize="small" />
-                  <Typography ml={0.5}>{selectedPost?.likes}</Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <ChatBubbleOutline fontSize="small" />
-                  <Typography ml={0.5}>{selectedPost?.comments}</Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Share fontSize="small" />
-                  <Typography ml={0.5}>{selectedPost?.shares}</Typography>
-                </Box>
-              </Box>
-
-              {/* Comment Input */}
-              <Box display="flex" alignItems="center" mb={2}>
+              {/* Bình luận */}
+              <Box mt={3}>
                 <TextField
+                  fullWidth
                   variant="outlined"
                   placeholder="Add a comment..."
-                  fullWidth
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   sx={{
@@ -337,43 +307,20 @@ const Discover: React.FC = () => {
                     input: { color: 'white' },
                   }}
                 />
-                <Button
-                  onClick={handleAddComment}
-                  variant="contained"
-                  sx={{
-                    marginLeft: 1,
-                    backgroundColor: '#e74863',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: '#d3cbc6'
-                    }
-                  }}
-                >
-                  <SendIcon sx={{ color: 'white' }} />
-                </Button>
-              </Box>
-
-              {/* Display Comments */}
-              {discussions.map((discussion, index) => (
-                <Box key={index} display="flex" alignItems="center" mb={1}>
-                  <Avatar src={discussion.userImage} />
-                  <Box ml={2}>
-                    <Typography variant="body2" color="white" fontWeight="bold">
-                      {discussion.username}
-                    </Typography>
-                    <Typography variant="body2" color="gray">
-                      {discussion.text}
-                    </Typography>
-                  </Box>
+                <Box display="flex" justifyContent="flex-end" mt={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddComment}
+                  >
+                    Comment
+                  </Button>
                 </Box>
-              ))}
+              </Box>
             </Box>
           </Box>
         </DialogContent>
       </Dialog>
-
-
-
     </Box>
   );
 };
