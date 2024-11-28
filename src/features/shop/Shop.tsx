@@ -68,7 +68,7 @@ const ShopPage: React.FC = () => {
       <ShopItemsGrid items={shopItems.map(item => ({
         id: item.product.productId,
         name: item.product.productName,
-        price: item.product.price / 1000, // Hiển thị giá với đơn vị nghìn
+        price: item.product.price, // Hiển thị giá với đơn vị nghìn
         description: item.product.productType,
         date: new Date(item.product.createdAt).toLocaleDateString(),
         image: item.imageUrl,

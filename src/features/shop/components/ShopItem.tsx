@@ -18,8 +18,17 @@ const ShopItem: React.FC<ShopItemProps> = ({ item }) => {
     navigate(`/product/${item.id}`);
   };
 
+  // Định dạng giá tiền theo kiểu VND với dấu phân cách hàng nghìn
+  const formattedPrice = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(item.price);
+
   return (
-    <div onClick={handleClick} className="flex flex-col justify-center items-center bg-[#1F1F30] rounded-lg cursor-pointer">
+    <div
+      onClick={handleClick}
+      className="flex flex-col justify-center items-center bg-[#1F1F30] rounded-lg cursor-pointer"
+    >
       <div className="size-[90%] bg-[#1a1b26] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
         <div className="h-48 bg-[#ff3366] flex items-center justify-center">
           <img
@@ -32,12 +41,11 @@ const ShopItem: React.FC<ShopItemProps> = ({ item }) => {
       <div className="p-4 text-white w-[90%] mt-1">
         <div className="flex justify-between items-center">
           <h3 className="font-bold text-lg mb-1">{item.name}</h3>
-          <p className="text-sm mb-2 text-gray-300">${item.price}</p>
+          <p className="text-sm mb-2 text-gray-300">{formattedPrice}</p>
         </div>
         <p className="text-sm mb-2 text-gray-300">{item.description}</p>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-
             <p className="text-sm mb-2 text-gray-300 ml-2">{item.name}</p>
           </div>
           <p className="text-sm mb-2 text-gray-300">{item.date}</p>
