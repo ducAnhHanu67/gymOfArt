@@ -47,7 +47,7 @@ const options = {
 
 const StatCard: React.FC<StatCardProps> = ({ title, number }) => {
     // Tùy chỉnh màu sắc cho từng StatCard dựa trên title
-    const backgroundColor = title === 'Feedback' ? '#206ec8' : '#e74863';
+    const backgroundColor = title === 'Total revenue' ? '#206ec8' : '#e74863';
 
     // Định nghĩa dữ liệu biểu đồ để sử dụng đúng kiểu dữ liệu
     const chartData = {

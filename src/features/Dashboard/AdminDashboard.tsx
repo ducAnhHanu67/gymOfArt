@@ -24,6 +24,7 @@ interface AccountCount {
 const AdminDashboard: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [accountCount, setAccountCount] = useState<AccountCount>({ user: 0, artist: 0 });
+    const [totalRevenue, setTotalRevenue] = useState<number>(0);
 
     useEffect(() => {
         // Gọi API để lấy danh sách đơn hàng
@@ -32,6 +33,9 @@ const AdminDashboard: React.FC = () => {
                 const response = await fetch("https://begymofart.onrender.com/orders");
                 const data = await response.json();
                 setOrders(data);
+                // Tính tổng doanh thu
+                const revenue = data.reduce((total: number, order: Order) => total + order.amount, 0);
+                setTotalRevenue(revenue);
             } catch (error) {
                 console.error("Lỗi khi lấy danh sách đơn hàng:", error);
             }
@@ -65,13 +69,13 @@ const AdminDashboard: React.FC = () => {
 
                     <Grid container spacing={3} sx={{ mt: 2 }}>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Order" number={accountCount.user} />
+                            <StatCard title="Order" number={orders.length} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Feedback" number={10} />
+                            <StatCard title="Total revenue" number={totalRevenue} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Total revenue" number={accountCount.artist} />
+                            <StatCard title="Artist" number={accountCount.artist} />
                         </Grid>
                     </Grid>
 
