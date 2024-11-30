@@ -56,11 +56,13 @@ function App() {
             <Route path="/library" element={<Library />} />
             <Route path="/store" element={<StoreComponent />} />
             <Route path="/checkout" element={<Payment />} />
-            <Route path="/payment-success" element={<PaymentStatus />} />
-            <Route path="/payment-cancel" element={<PaymentStatus />} />
+
             <Route path="/Product/:productId" element={<ProductDetail />} />
             <Route path="/Profile" element={<Profile />} />
           </Route>
+
+          <Route path="/payment-success" element={<PaymentStatus />} />
+          <Route path="/payment-cancel" element={<PaymentStatus />} />
 
           {/* Admin route */}
           <Route
