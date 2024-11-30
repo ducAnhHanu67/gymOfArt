@@ -14,7 +14,7 @@ interface StatCardProps {
 }
 
 // Dữ liệu mẫu cho biểu đồ, đảm bảo đúng kiểu dữ liệu
-const labels = ['Artist', 'User'];
+const labels = ['User', 'Artist'];
 
 
 const options = {
