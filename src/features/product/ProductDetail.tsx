@@ -38,7 +38,6 @@ const ProductDetail: React.FC = () => {
                     throw new Error('Failed to fetch product data');
                 }
                 const data = await response.json();
-                console.log(data, 'dataaa');
 
 
                 // Chuyển đổi dữ liệu API thành định dạng cần thiết cho component
