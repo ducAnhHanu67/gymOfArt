@@ -37,7 +37,7 @@ const PaymentStatus: React.FC = () => {
     return (
         <div className="payment-status">
             <h1>{statusMessage}</h1>
-            <p>Chúng tôi sẽ chuyển bạn về trang chủ trong giây lát...</p>
+            <p>Chúng tôi sẽ chuyển bạn về trang chủ trong giây lát....</p>
         </div>
     );
 };
