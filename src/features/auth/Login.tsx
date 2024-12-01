@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { authState } from './authState';
 import { useSetRecoilState } from 'recoil';
+import imageLogo from '../../assets/logoLogin.png'
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -191,16 +192,7 @@ export default function LoginForm() {
       </div>
       {/* Logo Section */}
       <div className="w-full md:w-1/2 bg-[#212A47] flex items-center justify-center p-12">
-        <div className="text-center">
-          <div className="w-48 h-48 mx-auto bg-[#37B6BD] rounded-full flex items-center justify-center">
-            <div className="w-36 h-36 bg-[#FFF3E0] rounded-full"></div>
-          </div>
-          <h2 className="mt-8 text-6xl font-bold">
-            <span className="text-[#E73C3C]">Go</span>
-            <span className="text-[#37B6BD]">A</span>
-          </h2>
-          <p className="text-[#37B6BD] text-3xl">Gym of Art</p>
-        </div>
+        <img src={imageLogo} alt="Logo" className="w-96 h-auto" />
       </div>
     </div>
   );
