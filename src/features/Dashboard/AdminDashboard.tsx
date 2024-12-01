@@ -5,6 +5,7 @@ import Header from '../Dashboard/components/Header';
 import StatCard from '../Dashboard/components/StatCard';
 import EventList from '../Dashboard/components/EventList';
 import StatCardArt from './components/StatCardArt';
+import StatCardOrder from './components/StatCardOrder';
 
 interface Order {
     id: number;
@@ -26,6 +27,7 @@ const AdminDashboard: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [accountCount, setAccountCount] = useState<AccountCount>({ user: 0, artist: 0 });
     const [totalRevenue, setTotalRevenue] = useState<number>(0);
+    const [orderStats, setOrderStats] = useState<any>({ successCount: 0, pendingCount: 0 });
 
     useEffect(() => {
         // Gọi API để lấy danh sách đơn hàng
@@ -53,8 +55,20 @@ const AdminDashboard: React.FC = () => {
             }
         };
 
+        // Gọi API để lấy thống kê số đơn hàng success và pending
+        const fetchOrderStats = async () => {
+            try {
+                const response = await fetch("https://begymofart.onrender.com/order-stats");
+                const data = await response.json();
+                setOrderStats(data);
+            } catch (error) {
+                console.error("Lỗi khi lấy thống kê đơn hàng:", error);
+            }
+        };
+
         fetchOrders();
         fetchAccountCount();
+        fetchOrderStats();
     }, []);
 
     return (
@@ -70,7 +84,7 @@ const AdminDashboard: React.FC = () => {
 
                     <Grid container spacing={3} sx={{ mt: 2 }}>
                         <Grid item xs={12} md={4}>
-                            <StatCard title="Order" number={orders.length} />
+                            <StatCardOrder title='Order' success={orderStats.successCount} pending={orderStats.pendingCount} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <StatCard title="Total revenue" number={totalRevenue} />
