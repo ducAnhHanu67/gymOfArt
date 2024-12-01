@@ -17,7 +17,7 @@ export function SignUpPart1({ onNext }: SignUpPart1Props) {
 
   useEffect(() => {
     setIsFormValid(
-      /^[A-Z0-9._%+-]+@gmail\.com$/i.test(email) && username !== ''
+      /^[A-Z0-9._%+-]+@(gmail\.com|fpt\.edu\.vn)$/i.test(email) && username !== ''
     );
   }, [email, username]);
 
@@ -69,11 +69,10 @@ export function SignUpPart1({ onNext }: SignUpPart1Props) {
         <button
           type="submit"
           disabled={!isFormValid}
-          className={`w-full text-white rounded-lg p-3 mt-4 ${
-            isFormValid
-              ? 'bg-red-500 hover:bg-red-600'
-              : 'bg-gray-500 cursor-not-allowed'
-          }`}
+          className={`w-full text-white rounded-lg p-3 mt-4 ${isFormValid
+            ? 'bg-red-500 hover:bg-red-600'
+            : 'bg-gray-500 cursor-not-allowed'
+            }`}
         >
           Next
         </button>
